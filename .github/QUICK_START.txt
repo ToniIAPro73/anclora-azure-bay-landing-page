@@ -1,0 +1,155 @@
+================================================================================
+  AZURE BAY MIGRATION - POWERSHELL QUICK START
+================================================================================
+
+STATUS: ✅ READY FOR EXECUTION
+DATE: 2025-12-20 04:38 CET
+BRANCH: perplexity/feat
+
+================================================================================
+  STEP 1: PRE-EXECUTION CHECKS
+================================================================================
+
+1. Open PowerShell 7.0+
+2. Navigate to repository:
+   cd "path/to/v0-landing-page-real-state"
+
+3. Verify you're on correct branch:
+   git branch
+   # Should show: * perplexity/feat
+
+4. Verify clean working directory:
+   git status
+   # Should show: nothing to commit, working tree clean
+
+5. Check Python:
+   python --version
+   # Should show: Python 3.9+
+
+================================================================================
+  STEP 2: DRY-RUN (VALIDATE WITHOUT CHANGES)
+================================================================================
+
+Run this command (copy & paste):
+
+./scripts/Execute-AzureBayMigration.ps1 -FilePath ./app/page.tsx -DryRun
+
+Expected: Shows list of operations ready to apply
+
+If it passes, proceed to Step 3.
+If it fails, see TROUBLESHOOTING below.
+
+================================================================================
+  STEP 3: EXECUTE WITH AUTO-COMMIT
+================================================================================
+
+Run this command (copy & paste):
+
+./scripts/Execute-AzureBayMigration.ps1 -FilePath ./app/page.tsx -CommitChanges
+
+Expected: Shows migration progress and creates commit
+
+When complete:
+- app/page.tsx will be updated
+- app/page.tsx.backup will be created
+- Changes committed to Git
+
+================================================================================
+  STEP 4: VERIFY CHANGES
+================================================================================
+
+Check what changed:
+
+git show HEAD --stat
+
+Verify replacements:
+
+git show HEAD:app/page.tsx | Select-String -Pattern "Azure Bay Residences" | Measure-Object -Line
+# Expected: 10+
+
+git show HEAD:app/page.tsx | Select-String -Pattern "Premium Beachfront Community" | Measure-Object -Line
+# Expected: 4+
+
+================================================================================
+  STEP 5: TEST LOCALLY
+================================================================================
+
+npm run dev
+
+Then visit: http://localhost:3000
+
+Check:
+- Hero section has "Azure Bay Residences" ✓
+- Subtitle shows "PREMIUM BEACHFRONT COMMUNITY" ✓
+- Prices display correctly ✓
+- Language toggle works ✓
+- No console errors ✓
+
+================================================================================
+  TROUBLESHOOTING
+================================================================================
+
+❌ "PowerShell execution policy" error:
+  → Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+  → Re-run the script
+
+❌ "Python not found" error:
+  → python3 --version
+  → If it works: Set-Alias -Name python -Value python3
+
+❌ Dry-run fails with "Pattern not found":
+  → File may be corrupted
+  → Reset: git reset --hard 12903822b33f753979cf4d38142d158e8ba32900
+  → Try again
+
+❌ Need to rollback:
+  → cp app/page.tsx.backup app/page.tsx
+  → git checkout -- app/page.tsx
+  → git reset --hard HEAD~1
+
+================================================================================
+  OPERATIONS APPLIED
+================================================================================
+
+✓ Operation 2: Location Genericization
+  • Al Marjan Island → Premium Beachfront Community
+  • Wynn references → Generic resort references
+
+✓ Operation 3: Price Adjustments
+  • Studio: €170k → €162k, £150k → £154.8k
+  • 1 Bed: €285k → €275k, £210k → £245.1k
+  • 2 Bed: €450k → €467k, £320k → £387k
+  • 3 Bed: €650k → €689k, £435k → £570k
+
+✓ Operation 4: Currency Formatting
+  • EUR: € before number (€162.000)
+  • GBP: £ before number (£154,800)
+
+✓ Operation 5: Meta Tags Preparation
+  • Ready for app/layout.tsx updates
+
+================================================================================
+  DOCUMENTATION
+================================================================================
+
+📖 Full Guide: POWERSHELL_EXECUTION_GUIDE.md
+📖 Migration: MIGRATION_INSTRUCTIONS.md
+📖 Status: .github/BATCH_1_STATUS.md
+📖 Summary: .github/BATCH_1_FINAL_SUMMARY.md
+
+================================================================================
+  SUPPORT
+================================================================================
+
+Git Repository: https://github.com/ToniIAPro73/v0-landing-page-real-state
+Branch: perplexity/feat
+Python Script: scripts/azure-bay-migration.py
+Orchestrator: scripts/Execute-AzureBayMigration.ps1
+
+================================================================================
+
+READY? Execute Step 2 above!
+
+Questions? Check POWERSHELL_EXECUTION_GUIDE.md
+
+================================================================================

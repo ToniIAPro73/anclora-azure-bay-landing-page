@@ -1,0 +1,42 @@
+name: ⚓ Anclora | Auto Sync Environments
+
+on:
+  push:
+    branches:
+      - development
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 🔹 Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📥 Ensure script exists
+        run: |
+          if [ ! -f "scripts/anclora_sync_envs.ps1" ]; then
+            mkdir -p scripts
+            curl -L -o scripts/anclora_sync_envs.ps1 \
+              https://raw.githubusercontent.com/ToniIAPro73/v0-landing-page-real-state/main/scripts/anclora_sync_envs.ps1
+          fi
+
+      - name: 🔄 Run sync (Dev → Main → Preview → Production)
+        shell: pwsh
+        run: ./scripts/anclora_sync_envs.ps1 -Mode FullSync
+
+      - name: 🧾 Generate sync summary
+        run: |
+          echo "🧭 Sync run on $(date)" > sync_summary.txt
+          git log -5 --oneline >> sync_summary.txt
+          cat sync_summary.txt
+
+      - name: 📤 Upload summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sync_summary
+          path: sync_summary.txt

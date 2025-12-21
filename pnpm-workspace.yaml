@@ -1,0 +1,6 @@
+ignoredBuiltDependencies:
+  - edgedriver
+  - esbuild
+  - geckodriver
+  - sharp
+  - unrs-resolver

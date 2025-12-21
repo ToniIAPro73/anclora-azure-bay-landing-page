@@ -1,0 +1,152 @@
+{
+  "migration": "Azure Bay Residences - Batch 1",
+  "status": "Ready for execution",
+  "date": "2025-12-20T03:35:00Z",
+  "operations": [
+    {
+      "id": "Op1",
+      "name": "Hero Title & Structured Data",
+      "status": "COMPLETED",
+      "commit": "12903822b33f753979cf4d38142d158e8ba32900",
+      "changes": [
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "playaviva-uniestate.vercel.app",
+          "replacement": "azure-bay-residences.vercel.app",
+          "scope": "SITE_URL constant",
+          "occurrences": 1
+        },
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "function PlayaVivaLanding()",
+          "replacement": "function AzureBayLanding()",
+          "scope": "Component function name",
+          "occurrences": 1
+        },
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "title: \"Playa Viva\"",
+          "replacement": "title: \"Azure Bay Residences\"",
+          "scope": "content.es.hero.title",
+          "occurrences": 1
+        },
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "subtitle: \"AL MARJAN ISLAND, RAS AL KHAIMAH\"",
+          "replacement": "subtitle: \"PREMIUM BEACHFRONT COMMUNITY\"",
+          "scope": "content.es.hero.subtitle",
+          "occurrences": 2
+        }
+      ]
+    },
+    {
+      "id": "Op2",
+      "name": "Location Genericization",
+      "status": "PENDING",
+      "scope": "content.*.{wynnEffect,gallery,location}",
+      "changes": [
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "El Wynn Resort & Casino de $5.1 mil millones será el primer casino en la historia de los EAU.",
+          "replacement": "El futuro resort de clase mundial de $5.1 mil millones será un polo de atracción turística y residencial.",
+          "scope": "content.es.wynnEffect.description",
+          "occurrences": 1
+        },
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "Su apertura en 2027 está catalizando una revalorización histórica en Al Marjan Island.",
+          "replacement": "Su apertura en 2027 está catalizando una revalorización histórica en la comunidad costera premium.",
+          "scope": "content.es.wynnEffect.description",
+          "occurrences": 1
+        },
+        {
+          "file": "app/page.tsx",
+          "type": "REPLACEMENT",
+          "pattern": "Diseño arquitectónico excepcional en Al Marjan Island",
+          "replacement": "Diseño arquitectónico excepcional en comunidad costera premium",
+          "scope": "content.es.gallery.subtitle",
+          "occurrences": 1
+        }
+      ]
+    },
+    {
+      "id": "Op3",
+      "name": "Price Adjustments",
+      "status": "PENDING",
+      "currency_pairs": {
+        "EUR_studio": {"from": "€170.000", "to": "€162.000"},
+        "EUR_1bed": {"from": "€285.000", "to": "€275.000"},
+        "EUR_2bed": {"from": "€450.000", "to": "€467.000"},
+        "EUR_3bed": {"from": "€650.000", "to": "€689.000"},
+        "GBP_studio": {"from": "£150,000", "to": "£154,800"},
+        "GBP_1bed": {"from": "£210,000", "to": "£245,100"},
+        "GBP_2bed": {"from": "£320,000", "to": "£387,000"},
+        "GBP_3bed": {"from": "£435,000", "to": "£570,000"}
+      }
+    },
+    {
+      "id": "Op4",
+      "name": "Currency Formatting",
+      "status": "PENDING",
+      "rules": [
+        "EUR: € before number (€170.000)",
+        "GBP: £ before number (£150,000)",
+        "Decimal: . for thousands in EUR, , in GBP"
+      ]
+    },
+    {
+      "id": "Op5",
+      "name": "Meta Tags & SEO",
+      "status": "PENDING",
+      "files": ["app/layout.tsx", "app/page.tsx"],
+      "changes": [
+        {
+          "type": "META_TITLE",
+          "from": "Playa Viva - Inversión Inmobiliaria",
+          "to": "Azure Bay Residences - Beachfront Luxury Investment"
+        },
+        {
+          "type": "CANONICAL_URL",
+          "from": "https://playaviva-uniestate.vercel.app",
+          "to": "https://azure-bay-residences.vercel.app"
+        },
+        {
+          "type": "OG_TITLE",
+          "from": "Playa Viva",
+          "to": "Azure Bay Residences"
+        },
+        {
+          "type": "OG_DESCRIPTION",
+          "from": "Inversión premium frente al mar en Al Marjan Island",
+          "to": "Premium beachfront residences in a coastal community"
+        }
+      ]
+    }
+  ],
+  "execution_checklist": [
+    "Reset to commit 12903822",
+    "Validate all patterns exist",
+    "Apply Operation 2-5 transformations",
+    "Verify file integrity",
+    "Create atomic commit",
+    "Test locally (npm run dev)",
+    "Verify meta tags",
+    "Language toggle test",
+    "Price display test"
+  ],
+  "validation_rules": [
+    "File size should be ~83KB",
+    "All 'Playa Viva' removed (except in comments/strings)",
+    "All 'Al Marjan Island' removed",
+    "All 'Azure Bay Residences' present",
+    "Currency symbols consistent",
+    "Component name updated to AzureBayLanding",
+    "SITE_URL updated"
+  ]
+}
