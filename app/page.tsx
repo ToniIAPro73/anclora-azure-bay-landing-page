@@ -2184,8 +2184,8 @@ export default function PlayaVivaLanding() {
                   transitionDuration: "2000ms",
                 }}
               >
-                <div className="hero-description relative mx-auto px-2">
-                  <p className="relative text-[#FFFFFF] text-sm sm:text-base md:text-lg font-medium px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center whitespace-nowrap [@media(max-width:768px)]:whitespace-normal">
+                <div className="hero-description relative mx-auto px-2 max-w-4xl">
+                  <p className="relative text-[#FFFFFF] text-sm sm:text-base md:text-lg font-medium px-3 sm:px-6 py-2 sm:py-3 tracking-[0.01em] text-center leading-relaxed">
                     {t.hero.description}
                   </p>
                 </div>
