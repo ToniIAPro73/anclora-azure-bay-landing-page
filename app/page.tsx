@@ -62,7 +62,7 @@ declare global {
   }
 }
 
-const SITE_URL = "https://playaviva-uniestate.vercel.app";
+const SITE_URL = "https://azurebay-meridiangroup.vercel.app/";
 
 type LeadAutomationPayload = {
   firstName: string;
@@ -1467,7 +1467,7 @@ export default function PlayaVivaLanding() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Residence",
-    name: "Playa Viva Residences",
+    name: "Azure Bay Residences",
     description:
       language === "es"
         ? "Residencias frente al mar en Al Marjan Island con entrega llave en mano y plan 1% mensual."
