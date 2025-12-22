@@ -2139,8 +2139,8 @@ export default function PlayaVivaLanding() {
               >
                 <div className="flex justify-center">
                   <Image
-                    src="/logo-playa-viva.png"
-                    alt="Playa Viva Logo"
+                    src="/logo-azure-bay.png"
+                    alt="Azure Bay Logo"
                     width={640}
                     height={256}
                     priority
