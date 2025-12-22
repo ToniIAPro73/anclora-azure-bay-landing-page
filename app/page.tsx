@@ -362,7 +362,7 @@ export default function PlayaVivaLanding() {
     es: {
       hero: {
         title: "Azure Bay",
-        subtitle: "AZURE BAY • DISTRITO COSTERO EN EXPANSIÓN",
+        subtitle: "VISTA MARINA, COSTA DEL SOL PREMIUM",
         description:
           "Caso de estudio (portfolio): complejo residencial ficticio frente al mar, impulsado por la futura Azure Grand Marina (primavera 2027). Proyecciones orientativas.",
         price: "Desde €198.000",
@@ -1467,7 +1467,7 @@ export default function PlayaVivaLanding() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Residence",
-    name: "Azure Bay Residences",
+    name: "Azure Bay",
     description:
       language === "es"
         ? "Residencias frente al mar en Al Marjan Island con entrega llave en mano y plan 1% mensual."
