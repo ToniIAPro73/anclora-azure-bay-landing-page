@@ -16,6 +16,7 @@
   - Genera reportes de cambios y divergencias
   - Modo seco (dry-run) para verificar antes de ejecutar
   - Muestra diffs de archivos ANTES de sincronizar ramas de usuario/agente
+  - FIX v4.2.1: Git fetch al inicio para análisis correcto
 
 .PARAMETER Mode
   'full' = Promoción completa (dev→main→preview→prod)
@@ -69,6 +70,13 @@ Get-ChildItem $logDir -Filter "promote_*.txt" -ErrorAction SilentlyContinue |
 $timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
 $logFile = Join-Path $logDir "promote_$timestamp.txt"
 Start-Transcript -Path $logFile -Append | Out-Null
+
+# ==========================
+# 🔄 FETCH INMEDIATO (CRÍTICO)
+# ==========================
+# Este fetch DEBE estar aquí, antes de cualquier análisis
+# de lo contrario, los análisis de divergencia usan datos viejos
+git fetch --all --quiet 2>$null
 
 # ==========================
 # 🎨 FUNCIONES DE UTILIDAD
@@ -411,8 +419,6 @@ if ($Mode -eq 'report') {
     
     Write-Step "2" "Analizando divergencias"
     
-    git fetch --all --quiet
-    
     Write-Host ""
     foreach ($branch in $hierarchyBranches) {
         $ahead = git rev-list --count "origin/$branch..HEAD" 2>$null || 0
@@ -434,18 +440,10 @@ if ($Mode -eq 'report') {
 }
 
 # ==========================
-# 🔄 ACTUALIZAR REMOTOS
-# ==========================
-
-Write-Step "2" "Actualizando referencias remotas"
-git fetch --all --quiet
-Write-Success "Referencias actualizadas"
-
-# ==========================
 # 🔍 ANÁLISIS DE DIVERGENCIAS
 # ==========================
 
-Write-Step "3" "Analizando divergencias"
+Write-Step "2" "Analizando divergencias"
 
 $divergences = @{}
 foreach ($branch in $hierarchyBranches) {
