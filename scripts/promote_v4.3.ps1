@@ -1,66 +1,34 @@
 <#
 .SYNOPSIS
-  ANCLORA PROMOTE v4.3 - Sistema profesional de promocion multi-rama CORREGIDO
-  Gestiona jerarquicamente: development -> main -> preview -> production
+  ANCLORA PROMOTE v4.3
 #>
 
 param(
     [ValidateSet('full', 'report', 'dry-run')]
-    [string]$Mode = 'full',
-    [bool]$Verbose = $true
+    [string]$Mode = 'full'
 )
 
 $ErrorActionPreference = "Continue"
 $repoRoot = (git rev-parse --show-toplevel 2>$null)
 if (-not $repoRoot) {
-    Write-Host "Error: No estas en un repositorio Git." -ForegroundColor Red
+    Write-Host "Error: No estas en repositorio Git" -ForegroundColor Red
     exit 1
 }
+
 Set-Location $repoRoot
 
-$logDir = Join-Path $repoRoot "logs"
-if (-not (Test-Path $logDir)) { 
-    New-Item -ItemType Directory -Path $logDir | Out-Null 
-}
+Write-Host ""
+Write-Host "===============================================" -ForegroundColor Cyan
+Write-Host "  ANCLORA PROMOTE v4.3" -ForegroundColor Cyan
+Write-Host "===============================================" -ForegroundColor Cyan
+Write-Host ""
 
-$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
-$logFile = Join-Path $logDir "promote_v4.3_$timestamp.txt"
-
-function Write-Title($text) {
-    Write-Host ""
-    Write-Host "====================================================" -ForegroundColor Cyan
-    Write-Host "  $text" -ForegroundColor Cyan
-    Write-Host "====================================================" -ForegroundColor Cyan
-    Write-Host ""
-}
-
-function Write-Step($num, $text) {
-    Write-Host "PASO $num: $text" -ForegroundColor Yellow
-}
-
-function Write-Success($text) {
-    Write-Host "[OK] $text" -ForegroundColor Green
-}
-
-function Write-Warning($text) {
-    Write-Host "[WARN] $text" -ForegroundColor Yellow
-}
-
-function Write-Error($text) {
-    Write-Host "[ERROR] $text" -ForegroundColor Red
-}
-
-function Write-Info($text) {
-    Write-Host "[INFO] $text" -ForegroundColor Cyan
-}
-
-Write-Title "ANCLORA PROMOTE v4.3 - Sistema Multi-Rama Mejorado"
-
-Write-Step "1" "Actualizando referencias remotas (FETCH INMEDIATO)"
+Write-Host "PASO 1: Actualizando referencias remotas" -ForegroundColor Yellow
 git fetch origin --all --quiet 2>$null
-Write-Success "Referencias actualizadas"
+Write-Host "[OK] Referencias actualizadas" -ForegroundColor Green
 
-Write-Step "2" "Detectando ramas"
+Write-Host ""
+Write-Host "PASO 2: Detectando ramas" -ForegroundColor Yellow
 
 $allBranches = @(git branch --format="%(refname:short)" | Where-Object { $_ })
 $hierarchyBranches = @('development', 'main', 'preview', 'production')
@@ -71,60 +39,59 @@ $agentBranches = @($allBranches | Where-Object {
 Write-Host ""
 Write-Host "RAMAS DETECTADAS:" -ForegroundColor Cyan
 foreach ($branch in $hierarchyBranches) {
-    $status = if ($branch -eq (git rev-parse --abbrev-ref HEAD)) { "<- ACTUAL" } else { "" }
-    Write-Host "  [HIERARCHY] $branch $status"
+    $current = git rev-parse --abbrev-ref HEAD
+    if ($branch -eq $current) {
+        Write-Host "  [$branch] <- ACTUAL"
+    } else {
+        Write-Host "  [$branch]"
+    }
 }
 
-if ($agentBranches) {
+if ($agentBranches.Count -gt 0) {
+    Write-Host ""
     foreach ($branch in $agentBranches) {
         Write-Host "  [AGENT] $branch"
     }
 }
 
 Write-Host ""
+Write-Host "PASO 3: Analizando divergencias" -ForegroundColor Yellow
 
-Write-Step "3" "Analizando estado de ramas (con datos FRESCOS)"
-
-$status = @{}
+$allSynced = $true
 foreach ($branch in $hierarchyBranches) {
     $localSHA = git rev-parse "refs/heads/$branch" 2>$null
     $remoteSHA = git rev-parse "refs/remotes/origin/$branch" 2>$null
     
-    $ahead = [int](git rev-list --count "origin/$branch..refs/heads/$branch" 2>$null || "0")
-    $behind = [int](git rev-list --count "refs/heads/$branch..origin/$branch" 2>$null || "0")
-    
-    $status[$branch] = @{
-        LocalSHA = $localSHA
-        RemoteSHA = $remoteSHA
-        Ahead = $ahead
-        Behind = $behind
-        IsSynced = ($localSHA -eq $remoteSHA)
+    if ($localSHA -eq $remoteSHA) {
+        Write-Host "[OK] $branch : SINCRONIZADO" -ForegroundColor Green
+    } else {
+        Write-Host "[WARN] $branch : Divergencia detectada" -ForegroundColor Yellow
+        $allSynced = $false
     }
 }
 
-Write-Host ""
-foreach ($branch in $hierarchyBranches) {
-    $s = $status[$branch]
-    if ($s.IsSynced) {
-        Write-Success "$branch: SINCRONIZADO"
-    } else {
-        Write-Warning "$branch: Divergencia (local: +$($s.Ahead) -$($s.Behind))"
-    }
-}
 Write-Host ""
 
 if ($Mode -eq 'report') {
-    Write-Title "REPORTE DE ESTADO"
-    Write-Host "Estado: Todas las ramas estan actualizadas con datos frescos" -ForegroundColor Green
+    Write-Host "===============================================" -ForegroundColor Cyan
+    Write-Host "REPORTE COMPLETADO" -ForegroundColor Cyan
+    Write-Host "===============================================" -ForegroundColor Cyan
+    if ($allSynced) {
+        Write-Host "ESTADO: TODAS SINCRONIZADAS" -ForegroundColor Green
+    } else {
+        Write-Host "ESTADO: DIVERGENCIAS DETECTADAS" -ForegroundColor Yellow
+    }
+    Write-Host ""
     exit 0
 }
 
 if ($Mode -eq 'full') {
-    Write-Title "FASE 1: PROMOCION JERARQUICA"
+    Write-Host "MODO FULL: Promocion jerarquica" -ForegroundColor Yellow
+    Write-Host ""
     
     $promotionChain = @(
-        @{ source = 'development'; target = 'main' }
-        @{ source = 'main'; target = 'preview' }
+        @{ source = 'development'; target = 'main' },
+        @{ source = 'main'; target = 'preview' },
         @{ source = 'preview'; target = 'production' }
     )
     
@@ -132,26 +99,14 @@ if ($Mode -eq 'full') {
         $source = $step.source
         $target = $step.target
         
-        Write-Host ""
         Write-Host "Promoviendo: $source -> $target" -ForegroundColor Cyan
         
         $sourceRemoteSHA = git rev-parse "refs/remotes/origin/$source" 2>$null
         $targetRemoteSHA = git rev-parse "refs/remotes/origin/$target" 2>$null
         
         if ($sourceRemoteSHA -eq $targetRemoteSHA) {
-            Write-Host "Ya estan sincronizadas" -ForegroundColor Gray
+            Write-Host "  Ya sincronizadas" -ForegroundColor Gray
             continue
-        }
-        
-        $targetAhead = [int](git rev-list --count "origin/$source..origin/$target" 2>$null || "0")
-        
-        if ($targetAhead -gt 0) {
-            Write-Warning "$target esta $targetAhead commits ADELANTE"
-            $choice = Read-Host "Continuar con force? (s/n)" 
-            if ($choice -ne 's') {
-                Write-Warning "Saltando: $source -> $target"
-                continue
-            }
         }
         
         git checkout $target --quiet 2>$null
@@ -159,56 +114,30 @@ if ($Mode -eq 'full') {
         
         if ($LASTEXITCODE -eq 0) {
             git push origin $target --quiet 2>$null
-            
-            if ($LASTEXITCODE -ne 0) {
-                Write-Warning "Push fallo, reintentando con force-with-lease..."
-                git push origin $target --force-with-lease --quiet 2>$null
-                
-                if ($LASTEXITCODE -eq 0) {
-                    Write-Success "Promocionado: $source -> $target (con force)"
-                } else {
-                    Write-Error "Push fallo incluso con force"
-                }
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "  [OK] Promocionado" -ForegroundColor Green
             } else {
-                Write-Success "Promocionado: $source -> $target"
+                Write-Host "  [RETRY] Push con force-with-lease" -ForegroundColor Yellow
+                git push origin $target --force-with-lease --quiet 2>$null
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "  [OK] Promocionado con force" -ForegroundColor Green
+                }
             }
         } else {
-            Write-Warning "Conflicto detectado en merge"
-            Write-Info "Resolviendo con Accept Incoming..."
-            
+            Write-Host "  [CONFLICT] Resolviendo automaticamente" -ForegroundColor Yellow
             git checkout --theirs . --quiet 2>$null
             git add . --quiet
-            git commit -m "fix: Resolver conflicto - accept incoming de $source" --quiet 2>$null
+            git commit -m "fix: Auto-resolve conflict" --quiet 2>$null
             git push origin $target --force-with-lease --quiet 2>$null
-            
-            Write-Success "Conflicto resuelto y promocionado"
+            Write-Host "  [OK] Conflicto resuelto" -ForegroundColor Green
         }
     }
     
-    Write-Title "FASE 2: SINCRONIZAR AGENTES"
-    
-    foreach ($agentBranch in $agentBranches) {
-        Write-Host ""
-        Write-Host "Agente: $agentBranch" -ForegroundColor Magenta
-        
-        $agentRemoteSHA = git rev-parse "refs/remotes/origin/$agentBranch" 2>$null
-        $mainRemoteSHA = git rev-parse "refs/remotes/origin/main" 2>$null
-        
-        if ($agentRemoteSHA -ne $mainRemoteSHA) {
-            Write-Info "Sincronizando con main..."
-            git checkout $agentBranch --quiet 2>$null
-            git pull origin main --rebase --quiet 2>$null
-            git push origin $agentBranch --quiet 2>$null
-            Write-Success "Sincronizado: $agentBranch"
-        } else {
-            Write-Host "Ya esta sincronizado" -ForegroundColor Gray
-        }
-    }
+    Write-Host ""
+    Write-Host "Promocion completada" -ForegroundColor Green
 }
 
-Write-Title "PROMOCION COMPLETADA v4.3"
 git checkout development --quiet
-Write-Success "Repositorio en: development"
-
 Write-Host ""
 Write-Host "Listo!" -ForegroundColor Green
+Write-Host ""
