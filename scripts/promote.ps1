@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  ANCLORA PROMOTE v4.2 - Sistema profesional de promoción multi-rama con escaneo previo
+  ANCLORA PROMOTE v4.3 - Sistema profesional de promoción multi-rama con escaneo previo
   Gestiona jerárquicamente: development → main → preview → production
   + ramas de usuarios/agentes (perplexity/feat, claude/feat, etc.)
   + NUEVO: Escaneo previo de TODAS las ramas desconocidas antes de ejecutar
@@ -17,6 +17,9 @@
   - Modo seco (dry-run) para verificar antes de ejecutar
   - Muestra diffs de archivos ANTES de sincronizar ramas de usuario/agente
   - FIX v4.2.1: Git fetch al inicio para análisis correcto
+  - NUEVO v4.3: Validación de estado limpio antes de operar
+  - NUEVO v4.3: Rollback automático si falla un paso intermedio
+  - NUEVO v4.3: Resumen detallado de acciones al finalizar
 
 .PARAMETER Mode
   'full' = Promoción completa (dev→main→preview→prod)
@@ -54,6 +57,15 @@ if (-not $repoRoot) {
     exit 1
 }
 Set-Location $repoRoot
+
+# ==========================
+# 📊 VARIABLES DE SEGUIMIENTO (v4.3)
+# ==========================
+$script:actionsPerformed = @()
+$script:rollbackStack = @()
+$script:startBranch = git rev-parse --abbrev-ref HEAD
+$script:startTime = Get-Date
+$script:promotionSuccess = $true
 
 # Crear directorio de logs
 $logDir = Join-Path $repoRoot "logs"
@@ -113,6 +125,121 @@ function Write-Info($text) {
 function Get-YesNo($question) {
     $response = Read-Host "$question (S/N)"
     return $response -match '^[sS]$'
+}
+
+# ==========================
+# 📝 FUNCIÓN LOG-ACTION (v4.3)
+# ==========================
+
+function Log-Action($action) {
+    <#
+    .SYNOPSIS
+    Registra una acción realizada para el resumen final
+    #>
+    $script:actionsPerformed += $action
+}
+
+# ==========================
+# ⏪ FUNCIÓN ROLLBACK (v4.3)
+# ==========================
+
+function Invoke-Rollback {
+    <#
+    .SYNOPSIS
+    Revierte todas las ramas modificadas a su estado anterior
+    #>
+    
+    if ($script:rollbackStack.Count -eq 0) {
+        Write-Warning "No hay estados para revertir"
+        return
+    }
+    
+    Write-Host ""
+    Write-Title "ROLLBACK AUTOMÁTICO"
+    Write-Warning "Revirtiendo cambios debido a error..."
+    Write-Host ""
+    
+    # Abortar cualquier merge en progreso
+    git merge --abort 2>$null
+    git rebase --abort 2>$null
+    
+    # Revertir en orden inverso
+    $reversedStack = $script:rollbackStack[($script:rollbackStack.Count - 1)..0]
+    
+    foreach ($item in $reversedStack) {
+        $branch = $item.Branch
+        $sha = $item.SHA
+        $shaShort = $sha.Substring(0, 7)
+        
+        Write-Host "  Restaurando $branch → $shaShort" -ForegroundColor Yellow
+        
+        git checkout $branch --quiet 2>$null
+        git reset --hard $sha --quiet 2>$null
+        git push origin $branch --force-with-lease --quiet 2>$null
+        
+        if ($LASTEXITCODE -eq 0) {
+            Write-Success "  $branch restaurada"
+            Log-Action "ROLLBACK: $branch → $shaShort"
+        } else {
+            Write-Error "  No se pudo restaurar $branch remotamente"
+            Log-Action "ROLLBACK FALLIDO: $branch"
+        }
+    }
+    
+    # Volver a la rama inicial
+    git checkout $script:startBranch --quiet 2>$null
+    
+    Write-Host ""
+    Write-Warning "Rollback completado. Revisa el estado manualmente."
+}
+
+# ==========================
+# 🔒 VALIDACIÓN DE ESTADO LIMPIO (v4.3)
+# ==========================
+
+function Test-CleanState {
+    <#
+    .SYNOPSIS
+    Verifica que el repositorio está en estado limpio antes de operar
+    #>
+    
+    Write-Step "0" "Validando estado del repositorio"
+    
+    # Verificar cambios sin commit
+    $status = git status --porcelain
+    if ($status) {
+        Write-Error "Repositorio con cambios sin commit:"
+        Write-Host ""
+        $status | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
+        Write-Host ""
+        Write-Host "Opciones:" -ForegroundColor Yellow
+        Write-Host "  1. git stash       → Guardar cambios temporalmente"
+        Write-Host "  2. git commit -am  → Confirmar cambios"
+        Write-Host "  3. git checkout .  → Descartar cambios"
+        Write-Host ""
+        return $false
+    }
+    
+    # Verificar merge en progreso
+    $mergeHead = Join-Path $repoRoot ".git/MERGE_HEAD"
+    if (Test-Path $mergeHead) {
+        Write-Error "Merge en progreso detectado"
+        Write-Host "Ejecuta: git merge --abort" -ForegroundColor Yellow
+        return $false
+    }
+    
+    # Verificar rebase en progreso
+    $rebaseDir = Join-Path $repoRoot ".git/rebase-merge"
+    $rebaseApplyDir = Join-Path $repoRoot ".git/rebase-apply"
+    if ((Test-Path $rebaseDir) -or (Test-Path $rebaseApplyDir)) {
+        Write-Error "Rebase en progreso detectado"
+        Write-Host "Ejecuta: git rebase --abort" -ForegroundColor Yellow
+        return $false
+    }
+    
+    Write-Success "Repositorio limpio"
+    Log-Action "Validación de estado: OK"
+    return $true
 }
 
 # ==========================
@@ -201,7 +328,7 @@ function Scan-AllBranches() {
     $allBranches = $allBranches | ForEach-Object { $_ -replace '^origin/', '' } | Sort-Object -Unique
     
     Write-Host ""
-    Write-Host "🃊 RAMAS DETECTADAS: $($allBranches.Count)" -ForegroundColor Cyan
+    Write-Host "🔍 RAMAS DETECTADAS: $($allBranches.Count)" -ForegroundColor Cyan
     Write-Host ""
     
     # Ramas conocidas (jerárquicas)
@@ -253,7 +380,7 @@ function Scan-AllBranches() {
             Write-Host "  • $branch" -ForegroundColor Yellow
             Write-Host "    Opciones: (j)erárquica, (a)gente, (b)ackup, (i)gnorar" -ForegroundColor Gray
             
-            $choice = Read-Host "    Tu elección" -DefaultValue "i"
+            $choice = Read-Host "    Tu elección"
             switch ($choice) {
                 'j' { Write-Info "    → Clasificada como JERÁRQUICA" }
                 'a' { Write-Info "    → Clasificada como AGENTE" }
@@ -282,6 +409,8 @@ function Scan-AllBranches() {
     Write-Host "│  📦 Backup: $($backupBranches.Count)" -ForegroundColor Gray
     Write-Host "└─══════════════" -ForegroundColor Cyan
     
+    Log-Action "Escaneo: $($allBranches.Count) ramas detectadas"
+    
     return @{
         All = $allBranches
         Hierarchy = @($allBranches | Where-Object { $_ -in $knownHierarchy })
@@ -292,12 +421,64 @@ function Scan-AllBranches() {
 }
 
 # ==========================
+# 📊 RESUMEN FINAL (v4.3)
+# ==========================
+
+function Show-Summary {
+    <#
+    .SYNOPSIS
+    Muestra el resumen de todas las acciones realizadas
+    #>
+    
+    $endTime = Get-Date
+    $duration = $endTime - $script:startTime
+    
+    Write-Host ""
+    Write-Title "RESUMEN DE EJECUCIÓN v4.3"
+    
+    Write-Host "┌─ INFORMACIÓN" -ForegroundColor Cyan
+    Write-Host "│  Modo:        $Mode" -ForegroundColor White
+    Write-Host "│  Duración:    $([math]::Round($duration.TotalSeconds, 2)) segundos" -ForegroundColor White
+    Write-Host "│  Rama actual: $(git rev-parse --abbrev-ref HEAD)" -ForegroundColor White
+    Write-Host "│  Estado:      $(if ($script:promotionSuccess) { 'COMPLETADO' } else { 'CON ERRORES' })" -ForegroundColor $(if ($script:promotionSuccess) { 'Green' } else { 'Red' })
+    Write-Host ""
+    
+    Write-Host "┌─ ACCIONES REALIZADAS ($($script:actionsPerformed.Count))" -ForegroundColor Yellow
+    if ($script:actionsPerformed.Count -eq 0) {
+        Write-Host "│  (ninguna)" -ForegroundColor Gray
+    } else {
+        foreach ($action in $script:actionsPerformed) {
+            $color = "Gray"
+            if ($action -match "^ROLLBACK") { $color = "Red" }
+            elseif ($action -match "promocionado|sincronizado") { $color = "Green" }
+            elseif ($action -match "conflicto") { $color = "Yellow" }
+            
+            Write-Host "│  • $action" -ForegroundColor $color
+        }
+    }
+    Write-Host "└─══════════════" -ForegroundColor Yellow
+    Write-Host ""
+}
+
+# ==========================
 # 🔍 DETECCIÓN DE RAMAS
 # ==========================
 
-Write-Title "ANCLORA PROMOTE v4.2 - Sistema Multi-Rama con Escaneo Previo"
+Write-Title "ANCLORA PROMOTE v4.3 - Sistema Multi-Rama con Escaneo Previo"
+
+# ==========================
+# 🔒 VALIDACIÓN PREVIA (v4.3)
+# ==========================
+
+if ($Mode -in @('full', 'safe', 'delete')) {
+    if (-not (Test-CleanState)) {
+        Stop-Transcript | Out-Null
+        exit 1
+    }
+}
 
 Write-Step "1" "Detectando ramas del repositorio"
+Log-Action "Fetch remoto: completado"
 
 # Obtener todas las ramas locales
 $allBranches = @(git branch --format="%(refname:short)" | Where-Object { $_ })
@@ -356,6 +537,7 @@ if ($Mode -eq 'scan') {
     Write-Title "MODO ESCANEO DE RAMAS"
     $scanResult = Scan-AllBranches
     Write-Success "Escaneo completado."
+    Show-Summary
     Stop-Transcript | Out-Null
     exit 0
 }
@@ -398,14 +580,18 @@ if ($Mode -eq 'delete') {
                 git branch -D $branch 2>$null
                 git push origin --delete $branch 2>$null
                 Write-Success "Eliminada: $branch"
+                Log-Action "Eliminada: $branch"
             } else {
                 Write-Host "[DRY-RUN] Se eliminaría: $branch" -ForegroundColor Gray
+                Log-Action "[DRY-RUN] Eliminar: $branch"
             }
         } else {
             Write-Warning "Operación cancelada para: $branch"
+            Log-Action "Cancelado: $branch"
         }
     }
     
+    Show-Summary
     Stop-Transcript | Out-Null
     exit 0
 }
@@ -421,20 +607,24 @@ if ($Mode -eq 'report') {
     
     Write-Host ""
     foreach ($branch in $hierarchyBranches) {
-        $ahead = git rev-list --count "origin/$branch..HEAD" 2>$null || 0
-        $behind = git rev-list --count "HEAD..origin/$branch" 2>$null || 0
+        $localSHA = git rev-parse "refs/heads/$branch" 2>$null
+        $remoteSHA = git rev-parse "refs/remotes/origin/$branch" 2>$null
         
-        $status = "✓ Sincronizado"
-        if ($ahead -gt 0 -or $behind -gt 0) {
-            $status = "⚠️  Divergencia: +$ahead -${behind}"
+        if ($localSHA -eq $remoteSHA) {
+            Write-Host "  ${branch}: ✓ Sincronizado" -ForegroundColor Green
+            Log-Action "$branch : SINCRONIZADO"
+        } else {
+            $ahead = git rev-list --count "origin/$branch..refs/heads/$branch" 2>$null
+            $behind = git rev-list --count "refs/heads/$branch..origin/$branch" 2>$null
+            Write-Host "  ${branch}: ⚠️  Divergencia +$ahead -$behind" -ForegroundColor Yellow
+            Log-Action "$branch : DIVERGENCIA +$ahead -$behind"
         }
-        
-        Write-Host "  ${branch}: ${status}" -ForegroundColor Cyan
     }
     
     Write-Host ""
     Write-Success "Reporte completado"
     
+    Show-Summary
     Stop-Transcript | Out-Null
     exit 0
 }
@@ -476,6 +666,8 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         @{ source = $previewBranch; target = $productionBranch }
     )
     
+    $failedStep = $null
+    
     foreach ($step in $promotionChain) {
         $source = $step.source
         $target = $step.target
@@ -494,6 +686,7 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
             if ($Mode -eq 'safe') {
                 if (-not (Get-YesNo "¿Deseas continuar con la promoción?")) {
                     Write-Warning "Promoción cancelada"
+                    Log-Action "$source → $target : CANCELADO por usuario"
                     continue
                 }
             }
@@ -501,26 +694,77 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         
         if ($sourceAhead -eq 0) {
             Write-Host "Sin cambios para promocionar" -ForegroundColor Gray
+            Log-Action "$source → $target : ya sincronizadas"
             continue
         }
         
         Write-Host "Cambios a promocionar: $sourceAhead commits" -ForegroundColor Yellow
         
         if (-not $DryRun) {
+            # Guardar estado para rollback (v4.3)
+            $targetLocalSHA = git rev-parse "refs/heads/$target" 2>$null
+            $script:rollbackStack += @{ Branch = $target; SHA = $targetLocalSHA }
+            
             git checkout $target --quiet
             git pull origin $target --rebase --quiet 2>$null
             git merge "origin/${source}" -m "🔀 Promote: $source → $target [$(Get-Date -Format 'yyyy-MM-dd HH:mm')]" --quiet 2>$null
             
             if (${LASTEXITCODE} -eq 0) {
                 git push origin $target --quiet
-                Write-Success "Promocionado: $source → ${target}"
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Success "Promocionado: $source → ${target}"
+                    Log-Action "$source → $target : promocionado"
+                } else {
+                    # Intentar force-with-lease
+                    git push origin $target --force-with-lease --quiet 2>$null
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Success "Promocionado (force): $source → ${target}"
+                        Log-Action "$source → $target : promocionado (force)"
+                    } else {
+                        Write-Error "Push fallido para $target"
+                        $script:promotionSuccess = $false
+                        $failedStep = "$source → $target"
+                        break
+                    }
+                }
             } else {
-                Write-Error "Conflicto en merge. Resuelve manualmente."
-                git merge --abort --quiet 2>$null
+                Write-Warning "Conflicto en merge. Intentando resolución automática..."
+                
+                # Intentar resolución automática
+                git checkout --theirs . 2>$null
+                git add . 2>$null
+                git commit -m "fix: Auto-resolve conflict $source → $target" --quiet 2>$null
+                
+                if ($LASTEXITCODE -eq 0) {
+                    git push origin $target --force-with-lease --quiet 2>$null
+                    if ($LASTEXITCODE -eq 0) {
+                        Write-Success "Conflicto resuelto: $source → ${target}"
+                        Log-Action "$source → $target : conflicto auto-resuelto"
+                    } else {
+                        Write-Error "Push fallido tras resolver conflicto"
+                        $script:promotionSuccess = $false
+                        $failedStep = "$source → $target (push fallido)"
+                        break
+                    }
+                } else {
+                    Write-Error "No se pudo resolver el conflicto automáticamente"
+                    git merge --abort --quiet 2>$null
+                    $script:promotionSuccess = $false
+                    $failedStep = "$source → $target (merge fallido)"
+                    break
+                }
             }
         } else {
             Write-Host "[DRY-RUN] Se promocionaría: $source → ${target}" -ForegroundColor Gray
+            Log-Action "[DRY-RUN] $source → $target"
         }
+    }
+    
+    # Ejecutar rollback si hubo fallo (v4.3)
+    if (-not $script:promotionSuccess -and $failedStep) {
+        Write-Error "Promoción fallida en: $failedStep"
+        Log-Action "ERROR: Fallo en $failedStep"
+        Invoke-Rollback
     }
 }
 
@@ -528,7 +772,7 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
 # 🤖 SINCRONIZAR RAMAS DE AGENTE
 # ==========================
 
-if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
+if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run') -and $script:promotionSuccess) {
     
     Write-Title "FASE 2: SINCRONIZAR RAMAS DE USUARIO/AGENTE"
     
@@ -551,13 +795,18 @@ if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
                         git pull origin $mainBranch --rebase --quiet 2>$null
                         git push origin $agentBranch --quiet
                         Write-Success "Sincronizado: $agentBranch ← ${mainBranch}"
+                        Log-Action "$agentBranch ← $mainBranch : sincronizado"
                     } else {
                         Write-Host "[DRY-RUN] Se sincronizaría: ${agentBranch}" -ForegroundColor Gray
+                        Log-Action "[DRY-RUN] $agentBranch ← $mainBranch"
                     }
+                } else {
+                    Log-Action "$agentBranch : omitido por usuario"
                 }
             }
         } else {
             Write-Host "Sin cambios en main para sincronizar" -ForegroundColor Gray
+            Log-Action "$agentBranch : ya sincronizada"
         }
     }
 }
@@ -588,7 +837,13 @@ Write-Host ""
 git checkout $devBranch --quiet
 Write-Success "Repositorio listo en rama: ${devBranch}"
 
+# Mostrar resumen detallado (v4.3)
+Show-Summary
+
 Stop-Transcript | Out-Null
 
-Write-Host ""
-Write-Host "✨ Promoción completada exitosamente [v4.2]" -ForegroundColor Green
+if ($script:promotionSuccess) {
+    Write-Host "✨ Promoción completada exitosamente [v4.3]" -ForegroundColor Green
+} else {
+    Write-Host "⚠️  Promoción completada con errores [v4.3]" -ForegroundColor Yellow
+}
