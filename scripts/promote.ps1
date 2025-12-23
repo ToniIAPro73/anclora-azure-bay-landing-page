@@ -75,19 +75,19 @@ function Write-Title($text) {
 }
 
 function Write-Step($num, $text) {
-    Write-Host "▸ PASO $num: $text" -ForegroundColor Yellow
+    Write-Host "▸ PASO ${num}: ${text}" -ForegroundColor Yellow
 }
 
 function Write-Success($text) {
-    Write-Host "✅ $text" -ForegroundColor Green
+    Write-Host "✅ ${text}" -ForegroundColor Green
 }
 
 function Write-Warning($text) {
-    Write-Host "⚠️  $text" -ForegroundColor Yellow
+    Write-Host "⚠️  ${text}" -ForegroundColor Yellow
 }
 
 function Write-Error($text) {
-    Write-Host "❌ $text" -ForegroundColor Red
+    Write-Host "❌ ${text}" -ForegroundColor Red
 }
 
 function Get-YesNo($question) {
@@ -129,7 +129,7 @@ Write-Host ""
 Write-Host "┌─ JERÁRQUICAS (Core - siempre sincronizadas)" -ForegroundColor Green
 foreach ($branch in $hierarchyBranches) {
     $status = if ($branch -eq (git rev-parse --abbrev-ref HEAD)) { "← ACTUAL" } else { "" }
-    Write-Host "│  ✓ $branch $status" -ForegroundColor Green
+    Write-Host "│  ✓ $branch ${status}" -ForegroundColor Green
 }
 Write-Host ""
 
@@ -220,10 +220,10 @@ if ($Mode -eq 'report') {
         
         $status = "✓ Sincronizado"
         if ($ahead -gt 0 -or $behind -gt 0) {
-            $status = "⚠️  Divergencia: +$ahead -$behind"
+            $status = "⚠️  Divergencia: +$ahead -${behind}"
         }
         
-        Write-Host "  $branch: $status" -ForegroundColor Cyan
+        Write-Host "  ${branch}: ${status}" -ForegroundColor Cyan
     }
     
     Write-Host ""
@@ -258,9 +258,9 @@ Write-Host ""
 foreach ($branch in $hierarchyBranches) {
     $div = $divergences[$branch]
     if ($div.Ahead -gt 0 -or $div.Behind -gt 0) {
-        Write-Warning "$branch: +$($div.Ahead) local, -$($div.Behind) remoto"
+        Write-Warning "${branch}: +$($div.Ahead) local, -$($div.Behind) remoto"
     } else {
-        Write-Success "$branch: Sincronizado"
+        Write-Success "${branch}: Sincronizado"
     }
 }
 
@@ -284,11 +284,11 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         $target = $step.target
         
         Write-Host ""
-        Write-Host "🔀 $source → $target" -ForegroundColor Cyan
+        Write-Host "🔀 $source → ${target}" -ForegroundColor Cyan
         
         # Verificar divergencias
-        $sourceAhead = [int](git rev-list --count "origin/$target..origin/$source" 2>$null || "0")
-        $targetAhead = [int](git rev-list --count "origin/$source..origin/$target" 2>$null || "0")
+        $sourceAhead = [int](git rev-list --count "origin/$target..origin/${source}" 2>$null || "0")
+        $targetAhead = [int](git rev-list --count "origin/$source..origin/${target}" 2>$null || "0")
         
         if ($targetAhead -gt 0) {
             Write-Warning "$target está $targetAhead commits ADELANTE"
@@ -311,17 +311,17 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         if (-not $DryRun) {
             git checkout $target --quiet
             git pull origin $target --rebase --quiet 2>$null
-            git merge "origin/$source" -m "🔀 Promote: $source → $target [$(Get-Date -Format 'yyyy-MM-dd HH:mm')]" --quiet 2>$null
+            git merge "origin/${source}" -m "🔀 Promote: $source → $target [$(Get-Date -Format 'yyyy-MM-dd HH:mm')]" --quiet 2>$null
             
-            if ($LASTEXITCODE -eq 0) {
+            if (${LASTEXITCODE} -eq 0) {
                 git push origin $target --quiet
-                Write-Success "Promocionado: $source → $target"
+                Write-Success "Promocionado: $source → ${target}"
             } else {
                 Write-Error "Conflicto en merge. Resuelve manualmente."
                 git merge --abort --quiet 2>$null
             }
         } else {
-            Write-Host "[DRY-RUN] Se promocionaría: $source → $target" -ForegroundColor Gray
+            Write-Host "[DRY-RUN] Se promocionaría: $source → ${target}" -ForegroundColor Gray
         }
     }
 }
@@ -336,11 +336,11 @@ if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
     
     foreach ($agentBranch in $agentBranches) {
         Write-Host ""
-        Write-Host "⚡ $agentBranch" -ForegroundColor Magenta
+        Write-Host "⚡ ${agentBranch}" -ForegroundColor Magenta
         
         # Detectar commits adelantados en main
-        $mainAhead = [int](git rev-list --count "origin/$mainBranch..origin/$agentBranch" 2>$null || "0")
-        $agentAhead = [int](git rev-list --count "origin/$agentBranch..origin/$mainBranch" 2>$null || "0")
+        $mainAhead = [int](git rev-list --count "origin/$mainBranch..origin/${agentBranch}" 2>$null || "0")
+        $agentAhead = [int](git rev-list --count "origin/$agentBranch..origin/${mainBranch}" 2>$null || "0")
         
         if ($mainAhead -gt 0) {
             Write-Warning "$mainBranch tiene $agentAhead commits nuevos"
@@ -351,9 +351,9 @@ if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
                         git checkout $agentBranch --quiet
                         git pull origin $mainBranch --rebase --quiet 2>$null
                         git push origin $agentBranch --quiet
-                        Write-Success "Sincronizado: $agentBranch ← $mainBranch"
+                        Write-Success "Sincronizado: $agentBranch ← ${mainBranch}"
                     } else {
-                        Write-Host "[DRY-RUN] Se sincronizaría: $agentBranch" -ForegroundColor Gray
+                        Write-Host "[DRY-RUN] Se sincronizaría: ${agentBranch}" -ForegroundColor Gray
                     }
                 }
             }
@@ -383,11 +383,11 @@ if ($agentBranches) {
 }
 
 Write-Host ""
-Write-Host "📋 Logs guardados en: $logFile" -ForegroundColor Cyan
+Write-Host "📋 Logs guardados en: ${logFile}" -ForegroundColor Cyan
 Write-Host ""
 
 git checkout $devBranch --quiet
-Write-Success "Repositorio listo en rama: $devBranch"
+Write-Success "Repositorio listo en rama: ${devBranch}"
 
 Stop-Transcript | Out-Null
 
