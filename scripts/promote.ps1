@@ -1,11 +1,13 @@
 <#
 .SYNOPSIS
-  ANCLORA PROMOTE v4.1 - Sistema profesional de promoción multi-rama con diff de archivos
+  ANCLORA PROMOTE v4.2 - Sistema profesional de promoción multi-rama con escaneo previo
   Gestiona jerárquicamente: development → main → preview → production
   + ramas de usuarios/agentes (perplexity/feat, claude/feat, etc.)
+  + NUEVO: Escaneo previo de TODAS las ramas desconocidas antes de ejecutar
 
 .DESCRIPTION
   Este script:
+  - NUEVO v4.2: Escanea TODAS las ramas antes de ejecutar (excepto backup/*)
   - Detecta automáticamente ramas principales y secundarias
   - Permite eliminación segura de ramas
   - Promociona cambios jerárquicamente con backups
@@ -13,21 +15,23 @@
   - Previene pérdida de datos con confirmaciones
   - Genera reportes de cambios y divergencias
   - Modo seco (dry-run) para verificar antes de ejecutar
-  - NUEVO v4.1: Muestra diffs de archivos ANTES de sincronizar ramas de usuario/agente
+  - Muestra diffs de archivos ANTES de sincronizar ramas de usuario/agente
 
 .PARAMETER Mode
   'full' = Promoción completa (dev→main→preview→prod)
   'safe' = Solo sync sin merge (consulta antes)
   'delete' = Eliminar ramas específicas
   'report' = Mostrar estado sin cambios
+  'scan' = NUEVO: Solo escanear ramas (sin hacer nada más)
 
 .EXAMPLE
   .\promote.ps1 -Mode full
+  .\promote.ps1 -Mode scan
   .\promote.ps1 -Mode delete -BranchesToDelete @("claude/fix-logo-transparency-0ud16")
 #>
 
 param(
-    [ValidateSet('full', 'safe', 'delete', 'report', 'dry-run')]
+    [ValidateSet('full', 'safe', 'delete', 'report', 'dry-run', 'scan')]
     [string]$Mode = 'full',
     
     [array]$BranchesToDelete = @(),
@@ -91,40 +95,29 @@ function Write-Error($text) {
     Write-Host "❌ ${text}" -ForegroundColor Red
 }
 
+function Write-Info($text) {
+    Write-Host "ℹ️  ${text}" -ForegroundColor Cyan
+}
+
 function Get-YesNo($question) {
     $response = Read-Host "$question (S/N)"
     return $response -match '^[sS]$'
 }
 
 # ==========================
-# 🆕 FUNCIÓN SHOW-FILEDIFF
+# 📄 FUNCIÓN SHOW-FILEDIFF
 # ==========================
 
 function Show-FileDiff($sourceBranch, $targetBranch) {
     <#
     .SYNOPSIS
     Muestra los archivos modificados entre dos ramas ANTES de sincronizar
-    
-    .DESCRIPTION
-    Detalla:
-    - Archivos añadidos (A)
-    - Archivos modificados (M)
-    - Archivos eliminados (D)
-    - Archivos renombrados (R)
-    Con estadísticas de líneas +/-
-    
-    .PARAMETER sourceBranch
-    Rama origen (ej: perplexity/feat)
-    
-    .PARAMETER targetBranch
-    Rama destino (ej: main)
     #>
     
     Write-Host ""
     Write-Host "📄 ANÁLISIS DE CAMBIOS: ${sourceBranch} → ${targetBranch}" -ForegroundColor Cyan
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
     
-    # Obtener lista de archivos modificados
     $diffOutput = git diff "origin/${targetBranch}...origin/${sourceBranch}" --name-status 2>$null
     
     if (-not $diffOutput) {
@@ -132,26 +125,17 @@ function Show-FileDiff($sourceBranch, $targetBranch) {
         return
     }
     
-    # Variables para contar cambios
     $addedCount = 0
     $modifiedCount = 0
     $deletedCount = 0
     $renamedCount = 0
-    $totalLinesAdded = 0
-    $totalLinesDeleted = 0
     
-    # Procesar cada línea del diff
     $diffLines = $diffOutput -split "`n" | Where-Object { $_ }
     
     foreach ($line in $diffLines) {
         $parts = $line -split "`t"
         $status = $parts[0]
         $filename = $parts[1]
-        
-        # Obtener estadísticas de líneas para este archivo
-        $stats = git diff "origin/${targetBranch}...origin/${sourceBranch}" -- $filename 2>$null | 
-                 git apply --stat 2>$null | 
-                 Select-Object -Last 1
         
         switch ($status) {
             'A' {
@@ -173,14 +157,6 @@ function Show-FileDiff($sourceBranch, $targetBranch) {
         }
     }
     
-    # Obtener estadísticas totales
-    $statsTotal = git diff "origin/${targetBranch}...origin/${sourceBranch}" --stat 2>$null | Select-Object -Last 1
-    if ($statsTotal -match "(\d+) insertion|(\d+) deletion") {
-        $matches[1] | ForEach-Object { $totalLinesAdded += $_ }
-        $matches[2] | ForEach-Object { $totalLinesDeleted += $_ }
-    }
-    
-    # Mostrar resumen
     Write-Host ""
     Write-Host "📊 RESUMEN:" -ForegroundColor Cyan
     Write-Host "  ├─ Archivos añadidos    : $addedCount" -ForegroundColor Green
@@ -192,17 +168,130 @@ function Show-FileDiff($sourceBranch, $targetBranch) {
 }
 
 # ==========================
+# 🔍 ESCANEO PREVIO DE RAMAS
+# ==========================
+
+function Scan-AllBranches() {
+    <#
+    .SYNOPSIS
+    Escanea TODAS las ramas del repositorio (excepto backup/*)
+    Detecta ramas desconocidas y solicita acción al usuario
+    #>
+    
+    Write-Title "ESCANEO PREVIO DE TODAS LAS RAMAS"
+    
+    Write-Step "0" "Escaneando referencias remotas..."
+    git fetch --all --quiet
+    
+    # Obtener todas las ramas
+    $allBranches = @(git branch -r --format="%(refname:short)" | Where-Object { $_ -and $_ -notmatch '^origin/HEAD' })
+    
+    # Limpiar prefijo 'origin/'
+    $allBranches = $allBranches | ForEach-Object { $_ -replace '^origin/', '' } | Sort-Object -Unique
+    
+    Write-Host ""
+    Write-Host "🃊 RAMAS DETECTADAS: $($allBranches.Count)" -ForegroundColor Cyan
+    Write-Host ""
+    
+    # Ramas conocidas (jerárquicas)
+    $knownHierarchy = @('development', 'main', 'master', 'preview', 'production')
+    
+    # Ramas de backup (ignorar)
+    $backupBranches = @($allBranches | Where-Object { $_ -match '^backup/' })
+    
+    # Ramas de usuario/agente (patrón: .*/feat|fix|test|wip)
+    $agentBranches = @($allBranches | Where-Object { 
+        $_ -match '/(feat|fix|test|wip)$' -and 
+        $_ -notin $knownHierarchy
+    }) | Sort-Object
+    
+    # Ramas desconocidas (NO coinciden con patrones conocidos)
+    $unknownBranches = @($allBranches | Where-Object {
+        $_ -notin $knownHierarchy -and
+        $_ -notmatch '^backup/' -and
+        $_ -notmatch '/(feat|fix|test|wip)$'
+    }) | Sort-Object
+    
+    # Mostrar ramas jerárquicas
+    Write-Host "┌─ JERÁRQUICAS (Core)" -ForegroundColor Green
+    foreach ($branch in ($knownHierarchy | Where-Object { $_ -in $allBranches })) {
+        Write-Host "│  ✓ $branch" -ForegroundColor Green
+    }
+    Write-Host ""
+    
+    # Mostrar ramas de agente
+    if ($agentBranches) {
+        Write-Host "┌─ USUARIO/AGENTE (Independientes)" -ForegroundColor Magenta
+        foreach ($branch in $agentBranches) {
+            Write-Host "│  ⚡ $branch" -ForegroundColor Magenta
+        }
+        Write-Host ""
+    }
+    
+    # Mostrar ramas desconocidas
+    if ($unknownBranches) {
+        Write-Host "┌─ DESCONOCIDAS (Nueva detección)" -ForegroundColor Yellow
+        foreach ($branch in $unknownBranches) {
+            Write-Host "│  ⚠️  $branch" -ForegroundColor Yellow
+        }
+        Write-Host ""
+        Write-Warning "Se han detectado $($unknownBranches.Count) rama(s) desconocida(s)."
+        Write-Host ""
+        Write-Info "Clasificación sugerida para cada rama:"
+        foreach ($branch in $unknownBranches) {
+            Write-Host "  • $branch" -ForegroundColor Yellow
+            Write-Host "    Opciones: (j)erárquica, (a)gente, (b)ackup, (i)gnorar" -ForegroundColor Gray
+            
+            $choice = Read-Host "    Tu elección" -DefaultValue "i"
+            switch ($choice) {
+                'j' { Write-Info "    → Clasificada como JERÁRQUICA" }
+                'a' { Write-Info "    → Clasificada como AGENTE" }
+                'b' { Write-Info "    → Marcada para BACKUP" }
+                'i' { Write-Info "    → IGNORADA" }
+                default { Write-Info "    → IGNORADA" }
+            }
+        }
+        Write-Host ""
+    }
+    
+    # Mostrar ramas de backup
+    if ($backupBranches) {
+        Write-Host "┌─ BACKUP (No sincronizar)" -ForegroundColor Gray
+        foreach ($branch in $backupBranches) {
+            Write-Host "│  📦 $branch" -ForegroundColor Gray
+        }
+        Write-Host ""
+    }
+    
+    Write-Host "┌─ RESUMEN" -ForegroundColor Cyan
+    Write-Host "│  Total de ramas: $($allBranches.Count)" -ForegroundColor Cyan
+    Write-Host "│  ✓ Jerárquicas: $(@($allBranches | Where-Object { $_ -in $knownHierarchy }).Count)" -ForegroundColor Green
+    Write-Host "│  ⚡ Agentes: $($agentBranches.Count)" -ForegroundColor Magenta
+    Write-Host "│  ⚠️  Desconocidas: $($unknownBranches.Count)" -ForegroundColor Yellow
+    Write-Host "│  📦 Backup: $($backupBranches.Count)" -ForegroundColor Gray
+    Write-Host "└─══════════════" -ForegroundColor Cyan
+    
+    return @{
+        All = $allBranches
+        Hierarchy = @($allBranches | Where-Object { $_ -in $knownHierarchy })
+        Agent = $agentBranches
+        Unknown = $unknownBranches
+        Backup = $backupBranches
+    }
+}
+
+# ==========================
 # 🔍 DETECCIÓN DE RAMAS
 # ==========================
 
-Write-Title "ANCLORA PROMOTE v4.1 - Sistema Multi-Rama con Diff"
+Write-Title "ANCLORA PROMOTE v4.2 - Sistema Multi-Rama con Escaneo Previo"
 
 Write-Step "1" "Detectando ramas del repositorio"
 
 # Obtener todas las ramas locales
 $allBranches = @(git branch --format="%(refname:short)" | Where-Object { $_ })
 
-# Ramas jerárquicas (SIEMPRE deben existir)
+# Ramas jerárquicas
 $mainBranch = if ($allBranches -contains 'main') { 'main' } elseif ($allBranches -contains 'master') { 'master' } else { 'main' }
 $devBranch = 'development'
 $previewBranch = 'preview'
@@ -210,13 +299,13 @@ $productionBranch = 'production'
 
 $hierarchyBranches = @($devBranch, $mainBranch, $previewBranch, $productionBranch)
 
-# Ramas de usuario/agente (opcionales)
+# Ramas de usuario/agente
 $agentBranches = @($allBranches | Where-Object { 
     $_ -match '/(feat|fix|test|wip)$' -and 
     $_ -notin $hierarchyBranches
 }) | Sort-Object
 
-# Ramas de backup (ignorar)
+# Ramas de backup
 $backupBranches = @($allBranches | Where-Object { $_ -match '^backup/' })
 
 Write-Host ""
@@ -247,6 +336,18 @@ if ($backupBranches) {
 
 Write-Host "Total de ramas: $($allBranches.Count)" -ForegroundColor Cyan
 Write-Host ""
+
+# ==========================
+# 🔍 MODO SCAN
+# ==========================
+
+if ($Mode -eq 'scan') {
+    Write-Title "MODO ESCANEO DE RAMAS"
+    $scanResult = Scan-AllBranches
+    Write-Success "Escaneo completado."
+    Stop-Transcript | Out-Null
+    exit 0
+}
 
 # ==========================
 # 🗑️ MODO DELETE
@@ -368,7 +469,6 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
     
     Write-Title "FASE 1: PROMOCIÓN JERÁRQUICA"
     
-    # Definir cadena de promoción
     $promotionChain = @(
         @{ source = $devBranch; target = $mainBranch }
         @{ source = $mainBranch; target = $previewBranch }
@@ -382,10 +482,8 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         Write-Host ""
         Write-Host "🔀 $source → ${target}" -ForegroundColor Cyan
         
-        # Mostrar diff ANTES de promocionar
         Show-FileDiff $source $target
         
-        # Verificar divergencias
         $sourceAhead = [int](git rev-list --count "origin/$target..origin/${source}" 2>$null || "0")
         $targetAhead = [int](git rev-list --count "origin/$source..origin/${target}" 2>$null || "0")
         
@@ -426,7 +524,7 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
 }
 
 # ==========================
-# 🤖 SINCRONIZAR RAMAS DE AGENTE (CON DIFF)
+# 🤖 SINCRONIZAR RAMAS DE AGENTE
 # ==========================
 
 if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
@@ -437,10 +535,8 @@ if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
         Write-Host ""
         Write-Host "⚡ ${agentBranch}" -ForegroundColor Magenta
         
-        # Mostrar diff ANTES de sincronizar (NUEVO v4.1)
         Show-FileDiff $agentBranch $mainBranch
         
-        # Detectar commits adelantados en main
         $mainAhead = [int](git rev-list --count "origin/$mainBranch..origin/${agentBranch}" 2>$null || "0")
         $agentAhead = [int](git rev-list --count "origin/$agentBranch..origin/${mainBranch}" 2>$null || "0")
         
@@ -494,4 +590,4 @@ Write-Success "Repositorio listo en rama: ${devBranch}"
 Stop-Transcript | Out-Null
 
 Write-Host ""
-Write-Host "✨ Promoción completada exitosamente [v4.1]" -ForegroundColor Green
+Write-Host "✨ Promoción completada exitosamente [v4.2]" -ForegroundColor Green
