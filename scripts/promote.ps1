@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-  ANCLORA PROMOTE v4.0 - Sistema profesional de promoción multi-rama y multi-usuario
+  ANCLORA PROMOTE v4.1 - Sistema profesional de promoción multi-rama con diff de archivos
   Gestiona jerárquicamente: development → main → preview → production
   + ramas de usuarios/agentes (perplexity/feat, claude/feat, etc.)
 
@@ -13,6 +13,7 @@
   - Previene pérdida de datos con confirmaciones
   - Genera reportes de cambios y divergencias
   - Modo seco (dry-run) para verificar antes de ejecutar
+  - NUEVO v4.1: Muestra diffs de archivos ANTES de sincronizar ramas de usuario/agente
 
 .PARAMETER Mode
   'full' = Promoción completa (dev→main→preview→prod)
@@ -96,10 +97,105 @@ function Get-YesNo($question) {
 }
 
 # ==========================
+# 🆕 FUNCIÓN SHOW-FILEDIFF
+# ==========================
+
+function Show-FileDiff($sourceBranch, $targetBranch) {
+    <#
+    .SYNOPSIS
+    Muestra los archivos modificados entre dos ramas ANTES de sincronizar
+    
+    .DESCRIPTION
+    Detalla:
+    - Archivos añadidos (A)
+    - Archivos modificados (M)
+    - Archivos eliminados (D)
+    - Archivos renombrados (R)
+    Con estadísticas de líneas +/-
+    
+    .PARAMETER sourceBranch
+    Rama origen (ej: perplexity/feat)
+    
+    .PARAMETER targetBranch
+    Rama destino (ej: main)
+    #>
+    
+    Write-Host ""
+    Write-Host "📄 ANÁLISIS DE CAMBIOS: ${sourceBranch} → ${targetBranch}" -ForegroundColor Cyan
+    Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor Gray
+    
+    # Obtener lista de archivos modificados
+    $diffOutput = git diff "origin/${targetBranch}...origin/${sourceBranch}" --name-status 2>$null
+    
+    if (-not $diffOutput) {
+        Write-Host "Sin cambios para mostrar" -ForegroundColor Gray
+        return
+    }
+    
+    # Variables para contar cambios
+    $addedCount = 0
+    $modifiedCount = 0
+    $deletedCount = 0
+    $renamedCount = 0
+    $totalLinesAdded = 0
+    $totalLinesDeleted = 0
+    
+    # Procesar cada línea del diff
+    $diffLines = $diffOutput -split "`n" | Where-Object { $_ }
+    
+    foreach ($line in $diffLines) {
+        $parts = $line -split "`t"
+        $status = $parts[0]
+        $filename = $parts[1]
+        
+        # Obtener estadísticas de líneas para este archivo
+        $stats = git diff "origin/${targetBranch}...origin/${sourceBranch}" -- $filename 2>$null | 
+                 git apply --stat 2>$null | 
+                 Select-Object -Last 1
+        
+        switch ($status) {
+            'A' {
+                Write-Host "  ➕ AÑADIDO    : $filename" -ForegroundColor Green
+                $addedCount++
+            }
+            'M' {
+                Write-Host "  ✏️  MODIFICADO: $filename" -ForegroundColor Yellow
+                $modifiedCount++
+            }
+            'D' {
+                Write-Host "  🗑️  ELIMINADO : $filename" -ForegroundColor Red
+                $deletedCount++
+            }
+            'R' {
+                Write-Host "  📝 RENOMBRADO: $filename" -ForegroundColor Magenta
+                $renamedCount++
+            }
+        }
+    }
+    
+    # Obtener estadísticas totales
+    $statsTotal = git diff "origin/${targetBranch}...origin/${sourceBranch}" --stat 2>$null | Select-Object -Last 1
+    if ($statsTotal -match "(\d+) insertion|(\d+) deletion") {
+        $matches[1] | ForEach-Object { $totalLinesAdded += $_ }
+        $matches[2] | ForEach-Object { $totalLinesDeleted += $_ }
+    }
+    
+    # Mostrar resumen
+    Write-Host ""
+    Write-Host "📊 RESUMEN:" -ForegroundColor Cyan
+    Write-Host "  ├─ Archivos añadidos    : $addedCount" -ForegroundColor Green
+    Write-Host "  ├─ Archivos modificados : $modifiedCount" -ForegroundColor Yellow
+    Write-Host "  ├─ Archivos eliminados  : $deletedCount" -ForegroundColor Red
+    Write-Host "  ├─ Archivos renombrados : $renamedCount" -ForegroundColor Magenta
+    Write-Host "  └─ Total: $($addedCount + $modifiedCount + $deletedCount + $renamedCount) archivos" -ForegroundColor Cyan
+    Write-Host ""
+}
+
+# ==========================
 # 🔍 DETECCIÓN DE RAMAS
 # ==========================
 
-Write-Title "ANCLORA PROMOTE v4.0 - Sistema Multi-Rama"
+Write-Title "ANCLORA PROMOTE v4.1 - Sistema Multi-Rama con Diff"
 
 Write-Step "1" "Detectando ramas del repositorio"
 
@@ -286,6 +382,9 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
         Write-Host ""
         Write-Host "🔀 $source → ${target}" -ForegroundColor Cyan
         
+        # Mostrar diff ANTES de promocionar
+        Show-FileDiff $source $target
+        
         # Verificar divergencias
         $sourceAhead = [int](git rev-list --count "origin/$target..origin/${source}" 2>$null || "0")
         $targetAhead = [int](git rev-list --count "origin/$source..origin/${target}" 2>$null || "0")
@@ -327,7 +426,7 @@ if ($Mode -in @('full', 'safe', 'dry-run')) {
 }
 
 # ==========================
-# 🤖 SINCRONIZAR RAMAS DE AGENTE
+# 🤖 SINCRONIZAR RAMAS DE AGENTE (CON DIFF)
 # ==========================
 
 if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
@@ -337,6 +436,9 @@ if ($agentBranches -and $Mode -in @('full', 'safe', 'dry-run')) {
     foreach ($agentBranch in $agentBranches) {
         Write-Host ""
         Write-Host "⚡ ${agentBranch}" -ForegroundColor Magenta
+        
+        # Mostrar diff ANTES de sincronizar (NUEVO v4.1)
+        Show-FileDiff $agentBranch $mainBranch
         
         # Detectar commits adelantados en main
         $mainAhead = [int](git rev-list --count "origin/$mainBranch..origin/${agentBranch}" 2>$null || "0")
@@ -392,4 +494,4 @@ Write-Success "Repositorio listo en rama: ${devBranch}"
 Stop-Transcript | Out-Null
 
 Write-Host ""
-Write-Host "✨ Promoción completada exitosamente" -ForegroundColor Green
+Write-Host "✨ Promoción completada exitosamente [v4.1]" -ForegroundColor Green
