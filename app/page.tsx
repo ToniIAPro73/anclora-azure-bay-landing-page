@@ -2129,7 +2129,8 @@ export default function PlayaVivaLanding() {
             >
               {/* Logo */}
               <div
-                className="transition-all ease-out mt-12 bg-transparent"
+                className="transition-all ease-out mt-12 bg-transparent logo-container"
+                suppressHydrationWarning
                 style={{
                   opacity: animationStates.logo ? 1 : 0,
                   transform: animationStates.logo ? "scale(1)" : "scale(0.3)",
@@ -2139,15 +2140,10 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <div className="flex justify-center bg-transparent">
-                  <Image
+                  <img
                     src="/logo-azure-bay.png"
                     alt="Azure Bay Logo"
-                    width={640}
-                    height={256}
-                    priority
-                    quality={60}
-                    className="w-auto h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain bg-transparent"
-                    sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 30vw"
+                    className="w-auto h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain"
                     style={{ backgroundColor: "transparent" }}
                   />
                 </div>

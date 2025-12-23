@@ -56,8 +56,8 @@
   --brown-dark: #3d3528;
 
   /* Font variables */
-  --font-sans: "Inter", "Geist", "Geist Fallback", system-ui, -apple-system,
-    sans-serif;
+  --font-sans:
+    "Inter", "Geist", "Geist Fallback", system-ui, -apple-system, sans-serif;
   --font-mono: "Geist Mono", "Geist Mono Fallback";
   --font-arabic: "Cinzel", serif;
 
@@ -336,4 +336,12 @@ altcha-widget::part(status) {
   font-family: "Cormorant Garamond", "Playfair Display", serif;
   letter-spacing: 0.05em;
   color: #5a4f3d;
+}
+
+/* Azure Bay Logo - Ensure full transparency */
+.logo-container,
+.logo-container > div,
+img[alt="Azure Bay Logo"] {
+  background-color: transparent !important;
+  background-image: none !important;
 }
