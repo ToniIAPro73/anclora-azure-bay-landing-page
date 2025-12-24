@@ -2143,8 +2143,9 @@ export default function PlayaVivaLanding() {
                   <Image
                     src="/logo-azure-bay.png"
                     alt="Azure Bay Logo"
-                    fill
-                    className="object-contain drop-shadow-[0_0_40px_rgba(212,175,55,0.4)]"
+                    width={300}
+                    height={200}
+                    className="w-auto h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 drop-shadow-[0_0_40px_rgba(212,175,55,0.4)]"
                     style={{ backgroundColor: "transparent" }}
                   />
                 </div>
