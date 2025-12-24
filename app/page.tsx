@@ -2145,6 +2145,7 @@ export default function PlayaVivaLanding() {
                   height={384}
                   className="h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 w-auto drop-shadow-[0_0_40px_rgba(212,175,55,0.4)]"
                   priority
+                  sizes="(max-width: 640px) 176px, (max-width: 768px) 240px, (max-width: 1024px) 288px, (max-width: 1280px) 320px, 384px"
                 />
               </div>
 
