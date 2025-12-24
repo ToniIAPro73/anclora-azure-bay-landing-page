@@ -2141,8 +2141,8 @@ export default function PlayaVivaLanding() {
                 <Image
                   src="/logo-azure-bay.png"
                   alt="Azure Bay Logo"
-                  width={500}
-                  height={333}
+                  width={384}
+                  height={384}
                   className="h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 w-auto drop-shadow-[0_0_40px_rgba(212,175,55,0.4)]"
                   priority
                 />
