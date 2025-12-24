@@ -2139,11 +2139,12 @@ export default function PlayaVivaLanding() {
                   backgroundColor: "transparent",
                 }}
               >
-                <div className="flex justify-center bg-transparent">
+                <div className="relative w-[300px] h-[200px] sm:w-[400px] sm:h-[267px] md:w-[500px] md:h-[333px]">
                   <Image
                     src="/logo-azure-bay.png"
                     alt="Azure Bay Logo"
-                    className="w-auto h-44 sm:h-60 md:h-72 lg:h-80 xl:h-96 drop-shadow-[0_0_40px_rgba(255,255,255,0.8)] filter brightness-110 contrast-110 object-contain"
+                    fill
+                    className="object-contain drop-shadow-[0_0_40px_rgba(212,175,55,0.4)]"
                     style={{ backgroundColor: "transparent" }}
                   />
                 </div>
