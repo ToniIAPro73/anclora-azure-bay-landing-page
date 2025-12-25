@@ -1500,8 +1500,8 @@ export default function PlayaVivaLanding() {
     ],
     seller: {
       "@type": "Organization",
-      name: "Uniestate",
-      url: "https://www.uniestate.co.uk",
+      name: "Anclora Private Estates",
+      url: "https://www.ancloraprivateestates.com",
     },
   };
   const featureColumns = [
@@ -1878,7 +1878,7 @@ export default function PlayaVivaLanding() {
         </Button>
       </div>
 
-      {/* Sticky Navigation Menu - Uniestate UK Style */}
+      {/* Sticky Navigation Menu - Anclora Style */}
       <nav
         className={`landing-nav fixed top-0 left-0 right-0 z-50 bg-cream-light/98 backdrop-blur-md border-b border-brown-dark/10 shadow-sm transition-transform duration-300 ${
           showNavbar ? "translate-y-0" : "-translate-y-full"
@@ -1886,12 +1886,12 @@ export default function PlayaVivaLanding() {
       >
         <div className="landing-nav__inner container mx-auto px-4 md:px-6">
           <div className="landing-nav__bar flex items-center justify-between h-14 md:h-16">
-            {/* Logo Uniestate */}
+            {/* Logo Anclora */}
             <div className="shrink-0">
               <button
-                onClick={() => scrollToSection("uniestate")}
+                onClick={() => scrollToSection("anclora")}
                 aria-label={
-                  language === "es" ? "Ir a Uniestate" : "Go to Uniestate"
+                  language === "es" ? "Ir a Anclora" : "Go to Anclora"
                 }
                 className="group relative text-brown-dark text-base md:text-lg font-bold tracking-tight transition-all duration-300 hover:text-gold-warm py-2 px-3 rounded-lg"
                 style={{
@@ -1900,7 +1900,7 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <span className="relative">
-                  UNIESTATE
+                  ANCLORA
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-linear-to-r from-gold-warm via-[#8B7355] to-transparent group-hover:w-full transition-all duration-500 ease-out" />
                 </span>
               </button>
@@ -3919,9 +3919,9 @@ export default function PlayaVivaLanding() {
       </section>
 
       {/* ==================== PIE DE PÁGINA: FOOTER ==================== */}
-      {/* Uniestate Section */}
+      {/* Anclora Private Estates Section */}
       <section
-        id="uniestate"
+        id="anclora"
         ref={footerRef}
         className="relative py-16 md:py-20 bg-[#f8f5f0]"
         style={{
@@ -3934,11 +3934,11 @@ export default function PlayaVivaLanding() {
       >
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            {/* Logo Uniestate centrado */}
+            {/* Logo Anclora centrado */}
             <div className="flex flex-col items-center mb-4 md:mb-6 space-y-2">
               <Image
-                src="/assets/imagenes/uniestate.png"
-                alt="Uniestate"
+                src="/assets/imagenes/anclora.png"
+                alt="Anclora Private Estates"
                 width={320}
                 height={200}
                 className="h-40 md:h-52 lg:h-64 object-contain w-auto"
@@ -3948,7 +3948,7 @@ export default function PlayaVivaLanding() {
 
             <div className="text-center mb-4 md:mb-5">
               <h2 className="text-2xl md:text-3xl font-medium text-[#5a4f3d] tracking-[0.15em] uppercase">
-                UNIESTATE
+                ANCLORA PRIVATE ESTATES
               </h2>
             </div>
 
@@ -3956,61 +3956,67 @@ export default function PlayaVivaLanding() {
             <div className="max-w-4xl mx-auto text-center space-y-4 mb-12">
               <p className="text-sm md:text-base text-[#6E5F46] leading-relaxed">
                 {language === "es"
-                  ? "Desde 1995, Uniestate ha sido un nombre líder en el desarrollo inmobiliario, creando espacios de alta calidad e innovadores que se convierten en hogares preciados y comunidades vibrantes. Nuestro compromiso con la calidad y la innovación garantiza que superemos las expectativas de los clientes, ofreciendo espacios residenciales y comerciales excepcionales."
-                  : "Since 1995, Uniestate has been a leading name in real estate development, creating high-quality, innovative living spaces that become cherished homes and vibrant communities. Our commitment to quality and innovation ensures we exceed client expectations, delivering exceptional residential and commercial spaces."}
+                  ? "Anclora Private Estates es una firma boutique especializada en inversiones inmobiliarias de ultra-lujo en los mercados más exclusivos del mundo. Nos dedicamos a identificar oportunidades únicas que combinan rentabilidad excepcional con activos tangibles de primer nivel."
+                  : "Anclora Private Estates is a boutique firm specializing in ultra-luxury real estate investments in the world's most exclusive markets. We are dedicated to identifying unique opportunities that combine exceptional returns with prime tangible assets."}
               </p>
               <p className="text-sm md:text-base text-[#6E5F46] leading-relaxed">
                 {language === "es"
-                  ? "Durante 30 años, nuestro éxito ha sido impulsado por una estrategia clara: identificar y asegurar ubicaciones privilegiadas para maximizar el crecimiento del capital."
-                  : "For 30 years, our success has been driven by a clear strategy: identifying and securing prime locations to maximize capital growth."}
+                  ? "Nuestra filosofía se centra en ofrecer acceso privilegiado a desarrollos premium antes de que lleguen al mercado general, permitiendo a nuestros clientes posicionarse estratégicamente en ubicaciones de alto crecimiento."
+                  : "Our philosophy focuses on providing privileged access to premium developments before they reach the general market, enabling our clients to strategically position themselves in high-growth locations."}
               </p>
             </div>
 
-            {/* Franja con tagline y stats */}
+            {/* Franja con principios de la firma */}
             <div className="bg-[#e8dcc8] py-10 md:py-12 px-6 md:px-8 rounded-2xl">
               {/* Tagline */}
               <div className="text-center mb-10 md:mb-12">
                 <h3 className="text-xl md:text-2xl font-light text-[#271c13] tracking-wide uppercase">
                   {language === "es"
-                    ? "Experiencia. Profesionalismo. Dedicación."
-                    : "Expertise. Professionalism. Dedication."}
+                    ? "Nuestros Principios"
+                    : "Our Principles"}
                 </h3>
               </div>
 
-              {/* Stats */}
+              {/* Principios */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto">
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
-                    + 50,000
+                  <p className="text-lg md:text-xl font-medium text-[#A29060] mb-2 uppercase tracking-wide">
+                    {language === "es" ? "Exclusividad" : "Exclusivity"}
                   </p>
-                  <p className="text-xs md:text-sm text-[#6E5F46]">
+                  <p className="text-xs md:text-sm text-[#6E5F46] leading-relaxed">
                     {language === "es"
-                      ? "Clientes Satisfechos"
-                      : "Satisfied Clients"}
+                      ? "Acceso a oportunidades selectas"
+                      : "Access to select opportunities"}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
-                    + 3,000
+                  <p className="text-lg md:text-xl font-medium text-[#A29060] mb-2 uppercase tracking-wide">
+                    {language === "es" ? "Transparencia" : "Transparency"}
                   </p>
-                  <p className="text-xs md:text-sm text-[#6E5F46]">
-                    {language === "es" ? "Unidades" : "Units"}
-                  </p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
-                    {language === "es" ? "+ 325.000 m²" : "+ 3.5 MM SQ.FT"}
-                  </p>
-                  <p className="text-xs md:text-sm text-[#6E5F46]">
-                    {language === "es" ? "Metros Cuadrados" : "Square Feet"}
+                  <p className="text-xs md:text-sm text-[#6E5F46] leading-relaxed">
+                    {language === "es"
+                      ? "Claridad en cada operación"
+                      : "Clarity in every transaction"}
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-2xl md:text-3xl font-light text-[#A29060] mb-1">
-                    30 {language === "es" ? "AÑOS" : "YEARS"}
+                  <p className="text-lg md:text-xl font-medium text-[#A29060] mb-2 uppercase tracking-wide">
+                    {language === "es" ? "Visión" : "Vision"}
                   </p>
-                  <p className="text-xs md:text-sm text-[#6E5F46]">
-                    {language === "es" ? "Desde 1995" : "Since 1995"}
+                  <p className="text-xs md:text-sm text-[#6E5F46] leading-relaxed">
+                    {language === "es"
+                      ? "Anticipación a mercados emergentes"
+                      : "Anticipating emerging markets"}
+                  </p>
+                </div>
+                <div className="text-center">
+                  <p className="text-lg md:text-xl font-medium text-[#A29060] mb-2 uppercase tracking-wide">
+                    {language === "es" ? "Compromiso" : "Commitment"}
+                  </p>
+                  <p className="text-xs md:text-sm text-[#6E5F46] leading-relaxed">
+                    {language === "es"
+                      ? "Acompañamiento personalizado"
+                      : "Personalized guidance"}
                   </p>
                 </div>
               </div>
