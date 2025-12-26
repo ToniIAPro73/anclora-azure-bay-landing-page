@@ -1390,19 +1390,19 @@ export default function PlayaVivaLanding() {
 
   const apartmentConfigs = {
     studio: {
-      image: "/assets/imagenes/studio.webp",
+      image: "/assets/imagenes/studio.png",
       sizeSqftRange: [300, 462] as [number, number],
       bedrooms: 0,
       bathrooms: 1,
     },
     oneBed: {
-      image: "/assets/imagenes/1-bedroom.webp",
+      image: "/assets/imagenes/1-bedroom.png",
       sizeSqftRange: [600, 850] as [number, number],
       bedrooms: 1,
       bathrooms: 1,
     },
     twoBed: {
-      image: "/assets/imagenes/2-bedroom.webp",
+      image: "/assets/imagenes/2-bedroom.png",
       sizeSqftRange: [1100, 1200] as [number, number],
       bedrooms: 2,
       bathrooms: 1,
@@ -3182,14 +3182,14 @@ export default function PlayaVivaLanding() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
               {[
                 {
-                  src: "/assets/imagenes/studio.webp",
+                  src: "/assets/imagenes/studio.png",
                   span: "md:col-span-2 md:row-span-2",
                 },
-                { src: "/assets/imagenes/1-bedroom.webp", span: "" },
-                { src: "/assets/imagenes/2-bedroom.webp", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%201.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%202.jpg", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%203.jpg", span: "" },
+                { src: "/assets/imagenes/1-bedroom.png", span: "" },
+                { src: "/assets/imagenes/2-bedroom.png", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%201.png", span: "" },
+                { src: "/assets/imagenes/foto%20galeria%202.png", span: "" },
+                { src: "/assets/imagenes/terraza.png", span: "" },
               ].map((image, index) => (
                 <div
                   key={index}
