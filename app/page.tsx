@@ -421,7 +421,7 @@ export default function PlayaVivaLanding() {
             "Tres torres icónicas que combinan elegancia atemporal con el entorno costero de Azure Bay District.",
             "Diseño arquitectónico que maximiza vistas panorámicas al mar abierto desde cada residencia.",
           ],
-          image: "/assets/imagenes/collage_estructura_es.png",
+          image: "/assets/imagenes/collage_estructura.png",
         },
         // FEATURES_2: Specifications
         specifications: {
@@ -931,7 +931,7 @@ export default function PlayaVivaLanding() {
             "Three iconic towers combining timeless elegance with the coastal setting of Azure Bay District.",
             "Architectural design that maximizes panoramic views of the open sea from every residence.",
           ],
-          image: "/assets/imagenes/collage_estructura_en.png",
+          image: "/assets/imagenes/collage_estructura.png",
         },
         // FEATURES_2: Specifications
         specifications: {
