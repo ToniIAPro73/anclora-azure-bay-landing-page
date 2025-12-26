@@ -3163,11 +3163,11 @@ export default function PlayaVivaLanding() {
           {/* Servicios e Instalaciones */}
           {activeGalleryTab === "servicios" && (
             <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2">
                 <Image
-                  src="/assets/imagenes/Collage-servicios-instalaciones.jpeg"
+                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
                   alt="Servicios e Instalaciones - Playa Viva"
-                  className="w-full h-auto"
+                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1210}
                   height={968}
                   loading="lazy"
