@@ -3179,34 +3179,26 @@ export default function PlayaVivaLanding() {
 
           {/* Interior */}
           {activeGalleryTab === "interior" && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {[
-                {
-                  src: "/assets/imagenes/studio.png",
-                  span: "md:col-span-2 md:row-span-2",
-                },
-                { src: "/assets/imagenes/1-bedroom.png", span: "" },
-                { src: "/assets/imagenes/2-bedroom.png", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%201.png", span: "" },
-                { src: "/assets/imagenes/foto%20galeria%202.png", span: "" },
-                { src: "/assets/imagenes/terraza.png", span: "" },
-              ].map((image, index) => (
-                <div
-                  key={index}
-                  className={`relative overflow-hidden rounded-xl border-2 border-gold-warm/20 hover:border-gold-warm hover:shadow-xl hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-1 cursor-pointer group ${image.span}`}
-                >
-                  <div className="aspect-square relative">
-                    <Image
-                      src={image.src}
-                      alt={`Interior ${index + 1}`}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                    />
-                  </div>
-                  <div className="absolute inset-0 bg-linear-to-t from-brown-dark/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-              ))}
+            <div className="max-w-6xl mx-auto">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2">
+                <Image
+                  src={
+                    language === "es"
+                      ? "/assets/imagenes/collage-interiores-es.png"
+                      : "/assets/imagenes/collage-interiores-en.png"
+                  }
+                  alt={
+                    language === "es"
+                      ? "Collage de interiores"
+                      : "Interiors collage"
+                  }
+                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  width={1210}
+                  height={968}
+                  loading="lazy"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
+                />
+              </div>
             </div>
           )}
 
