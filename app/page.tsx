@@ -461,23 +461,23 @@ export default function PlayaVivaLanding() {
           tabs: [
             {
               label: "Comunidad Costera",
-              image: "/assets/imagenes/view1.webp",
+              image: "/assets/imagenes/view1.png",
               description: "Comunidad exclusiva en primera línea de playa",
             },
             {
               label: "Diseño Inspirador",
-              image: "/assets/imagenes/view2.jpg",
+              image: "/assets/imagenes/view2.png",
               description:
                 "Arquitectura que captura la esencia del Mediterráneo",
             },
             {
               label: "Lujo sin Esfuerzo",
-              image: "/assets/imagenes/view3.webp",
+              image: "/assets/imagenes/view3.png",
               description: "Lujo sin esfuerzo en cada detalle",
             },
             {
               label: "Acceso a Playa",
-              image: "/assets/imagenes/beach.webp",
+              image: "/assets/imagenes/beach.png",
               description: "Acceso directo a playas de arena blanca",
             },
           ],
@@ -971,22 +971,22 @@ export default function PlayaVivaLanding() {
           tabs: [
             {
               label: "Coastal Community",
-              image: "/assets/imagenes/view1.webp",
+              image: "/assets/imagenes/view1.png",
               description: "Exclusive beachfront community",
             },
             {
               label: "Inspired Design",
-              image: "/assets/imagenes/view2.jpg",
+              image: "/assets/imagenes/view2.png",
               description: "Architecture capturing Mediterranean essence",
             },
             {
               label: "Effortless Luxury",
-              image: "/assets/imagenes/view3.webp",
+              image: "/assets/imagenes/view3.png",
               description: "Effortless luxury in every detail",
             },
             {
               label: "Beach Access",
-              image: "/assets/imagenes/beach.webp",
+              image: "/assets/imagenes/beach.png",
               description: "Direct access to white sandy beaches",
             },
           ],
