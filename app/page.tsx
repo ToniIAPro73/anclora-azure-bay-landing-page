@@ -3205,11 +3205,19 @@ export default function PlayaVivaLanding() {
           {/* Sitios de Interés */}
           {activeGalleryTab === "sitios" && (
             <div className="max-w-6xl mx-auto">
-              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
+              <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2">
                 <Image
-                  src="/assets/imagenes/Collage_sitios_interes.png"
-                  alt="Sitios de interes cercanos a Playa Viva"
-                  className="w-full h-auto"
+                  src={
+                    language === "es"
+                      ? "/assets/imagenes/Collage_Sitios_Interes_Mejorado-es.png"
+                      : "/assets/imagenes/Collage_Sitios_Interes_Mejorado-en.png"
+                  }
+                  alt={
+                    language === "es"
+                      ? "Sitios de interes cercanos a Playa Viva"
+                      : "Points of interest near Playa Viva"
+                  }
+                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1210}
                   height={968}
                   loading="lazy"
