@@ -506,7 +506,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Piscinas Exteriores",
-              image: "/assets/imagenes/Piscina_mejorada.png",
+              image: "/assets/imagenes/piscina_mejorada.png",
               description: "Piscinas infinity con vistas al mar Arábigo",
             },
             {
@@ -3165,7 +3165,7 @@ export default function PlayaVivaLanding() {
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300">
                 <Image
-                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
+                  src="/assets/imagenes/Collage-servicios-instalaciones.jpeg"
                   alt="Servicios e Instalaciones - Playa Viva"
                   className="w-full h-auto"
                   width={1210}
@@ -3971,9 +3971,7 @@ export default function PlayaVivaLanding() {
               {/* Tagline */}
               <div className="text-center mb-10 md:mb-12">
                 <h3 className="text-xl md:text-2xl font-light text-[#271c13] tracking-wide uppercase">
-                  {language === "es"
-                    ? "Nuestros Principios"
-                    : "Our Principles"}
+                  {language === "es" ? "Nuestros Principios" : "Our Principles"}
                 </h3>
               </div>
 
