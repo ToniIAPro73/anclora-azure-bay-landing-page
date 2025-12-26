@@ -489,18 +489,18 @@ export default function PlayaVivaLanding() {
           items: [
             {
               title: "Cine Exterior",
-              image: "/assets/imagenes/cinema.webp",
+              image: "/assets/imagenes/cinema.png",
               description:
                 "Cine al aire libre con proyección bajo las estrellas",
             },
             {
               title: "Spa y Bienestar",
-              image: "/assets/imagenes/foto galeria 7.jpg",
+              image: "/assets/imagenes/foto galeria 7.png",
               description: "Centro de bienestar con tratamientos de lujo",
             },
             {
               title: "Centro de Fitness",
-              image: "/assets/imagenes/foto galeria 4.jpg",
+              image: "/assets/imagenes/foto galeria 4.png",
               description:
                 "Gimnasio equipado con tecnología de última generación",
             },
@@ -511,7 +511,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Comercios y Restauración",
-              image: "/assets/imagenes/retail.webp",
+              image: "/assets/imagenes/retail.png",
               description: "Gastronomía y retail de primer nivel",
             },
           ],
@@ -998,17 +998,17 @@ export default function PlayaVivaLanding() {
           items: [
             {
               title: "Outdoor Cinema",
-              image: "/assets/imagenes/cinema.webp",
+              image: "/assets/imagenes/cinema.png",
               description: "Open-air cinema with screenings under the stars",
             },
             {
               title: "Spa & Wellness",
-              image: "/assets/imagenes/foto galeria 7.jpg",
+              image: "/assets/imagenes/foto galeria 7.png",
               description: "Wellness center with luxury treatments",
             },
             {
               title: "Fitness Center",
-              image: "/assets/imagenes/foto galeria 4.jpg",
+              image: "/assets/imagenes/foto galeria 4.png",
               description: "Gym equipped with state-of-the-art technology",
             },
             {
@@ -1018,7 +1018,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Retail & Dining",
-              image: "/assets/imagenes/retail.webp",
+              image: "/assets/imagenes/retail.png",
               description: "World-class dining and retail",
             },
           ],
