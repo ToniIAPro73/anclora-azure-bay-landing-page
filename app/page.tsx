@@ -600,7 +600,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "Abril 2026",
-            image: "/assets/imagenes/news_2.webp",
+            image: "/assets/imagenes/news_2.png",
             alt: "Global Wealth Digest - Coastal migration",
             source: "Global Wealth Digest",
             title: "La nueva ola de inversión en distritos costeros emergentes",
@@ -1107,7 +1107,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "April 2026",
-            image: "/assets/imagenes/news_2.webp",
+            image: "/assets/imagenes/news_2.png",
             alt: "Global Wealth Digest - Coastal migration",
             source: "Global Wealth Digest",
             title: "Capital shifts towards emerging coastal districts",
@@ -2712,7 +2712,7 @@ export default function PlayaVivaLanding() {
                           alt={article.alt}
                           width={480}
                           height={320}
-                          className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                          className="w-full h-48 md:h-56 object-cover filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
                           sizes="(max-width: 768px) 80vw, 20vw"
                         />
                         <div className="mt-4 space-y-2 flex-1 flex flex-col">
@@ -2788,7 +2788,7 @@ export default function PlayaVivaLanding() {
                         alt={article.alt}
                         width={480}
                         height={320}
-                        className="w-full h-auto object-contain filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                        className="w-full h-48 md:h-56 object-cover filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
                         sizes="(max-width: 768px) 80vw, 20vw"
                       />
                       <div className="mt-4 space-y-2 flex-1 flex flex-col">
