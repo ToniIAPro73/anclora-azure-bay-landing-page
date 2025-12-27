@@ -3024,6 +3024,7 @@ export default function PlayaVivaLanding() {
                         src={item.image}
                         alt={item.title}
                         fill
+                        unoptimized
                         className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
                         sizes="256px"
                       />
@@ -3067,6 +3068,7 @@ export default function PlayaVivaLanding() {
                         src={item.image}
                         alt={item.title}
                         fill
+                        unoptimized
                         className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
                         sizes="(max-width: 768px) 100vw, 320px"
                       />
@@ -3309,6 +3311,7 @@ export default function PlayaVivaLanding() {
                   alt={apartmentCopy.headline}
                   width={1600}
                   height={1000}
+                  unoptimized
                   className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   sizes="(max-width: 768px) 100vw, 75vw"
                 />
