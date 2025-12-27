@@ -506,8 +506,8 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Piscinas Exteriores",
-              image: "/assets/imagenes/piscina_mejorada.png",
-              description: "Piscinas infinity con vistas al mar Arábigo",
+              image: "/assets/imagenes/nueva_piscina_mejorada.png",
+              description: "Piscinas infinity con vistas al Mediterráneo",
             },
             {
               title: "Comercios y Restauración",
@@ -1013,8 +1013,8 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Outdoor Swimming Pools",
-              image: "/assets/imagenes/piscina_mejorada.png",
-              description: "Infinity pools with Arabian Sea views",
+              image: "/assets/imagenes/nueva_piscina_mejorada.png",
+              description: "Infinity pools overlooking the Mediterranean",
             },
             {
               title: "Retail & Dining",
