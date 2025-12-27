@@ -1013,7 +1013,7 @@ export default function PlayaVivaLanding() {
             },
             {
               title: "Outdoor Swimming Pools",
-              image: "/assets/imagenes/Piscina_mejorada.png",
+              image: "/assets/imagenes/piscina_mejorada.png",
               description: "Infinity pools with Arabian Sea views",
             },
             {
