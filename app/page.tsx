@@ -1390,25 +1390,25 @@ export default function PlayaVivaLanding() {
 
   const apartmentConfigs = {
     studio: {
-      image: "/assets/imagenes/studio.png",
+      image: "/assets/imagenes/studio-1.png",
       sizeSqftRange: [300, 462] as [number, number],
       bedrooms: 0,
       bathrooms: 1,
     },
     oneBed: {
-      image: "/assets/imagenes/1-bedroom.png",
+      image: "/assets/imagenes/1-bedroom-1.png",
       sizeSqftRange: [600, 850] as [number, number],
       bedrooms: 1,
       bathrooms: 1,
     },
     twoBed: {
-      image: "/assets/imagenes/2-bedroom.png",
+      image: "/assets/imagenes/2-bedroom-1.png",
       sizeSqftRange: [1100, 1200] as [number, number],
       bedrooms: 2,
       bathrooms: 1,
     },
     threeBed: {
-      image: "/assets/imagenes/3-bedroom.png",
+      image: "/assets/imagenes/3-bedroom-1.png",
       sizeSqftRange: [1700, 1800] as [number, number],
       bedrooms: 3,
       bathrooms: 2,
@@ -3459,7 +3459,7 @@ export default function PlayaVivaLanding() {
                     : "bg-[#e3ded4] text-[#5a4f3d] hover:bg-[#d8d3c9]"
                 }`}
               >
-                Al Marjan Island
+                Azure Bay District
               </button>
               <button
                 onClick={() => setLocationView("map")}
