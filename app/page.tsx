@@ -3944,7 +3944,7 @@ export default function PlayaVivaLanding() {
                 alt="Anclora Private Estates"
                 width={320}
                 height={200}
-                className="h-40 md:h-52 lg:h-64 object-contain w-auto"
+                className="h-40 md:h-52 lg:h-64 object-contain w-auto filter grayscale hover:grayscale-0 transition-all duration-500 drop-shadow-xl"
                 sizes="(max-width: 768px) 60vw, 25vw"
               />
             </div>
