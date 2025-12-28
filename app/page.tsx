@@ -3939,7 +3939,7 @@ export default function PlayaVivaLanding() {
           <div className="max-w-6xl mx-auto">
             {/* Logo Anclora centrado */}
             <div className="flex flex-col items-center mb-4 md:mb-6 space-y-2">
-              <div className="relative inline-flex items-center justify-center px-5 md:px-6 lg:px-7 py-6 md:py-7">
+              <div className="group relative inline-flex items-center justify-center px-5 md:px-6 lg:px-7 py-6 md:py-7">
                 <div
                   className="pointer-events-none absolute inset-0 rounded-[26px] bg-gradient-to-br from-[#fdf8ef] via-[#f4e8d5] to-[#e8dcc8] shadow-[0_20px_50px_rgba(34,24,14,0.22)] border border-[#e0d2b8]"
                   aria-hidden="true"
@@ -3954,7 +3954,7 @@ export default function PlayaVivaLanding() {
                   alt="Anclora Private Estates"
                   width={320}
                   height={200}
-                  className="relative z-10 h-40 md:h-52 lg:h-64 object-contain w-auto filter grayscale hover:grayscale-0 transition-all duration-500 drop-shadow-2xl"
+                  className="relative z-10 h-40 md:h-52 lg:h-64 object-contain w-auto filter grayscale transition-all duration-500 ease-out drop-shadow-2xl group-hover:-translate-y-2 group-hover:drop-shadow-[0_18px_45px_rgba(34,24,14,0.28)] group-hover:grayscale-0"
                   sizes="(max-width: 768px) 60vw, 25vw"
                 />
               </div>
