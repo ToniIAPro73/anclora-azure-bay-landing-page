@@ -3480,7 +3480,7 @@ export default function PlayaVivaLanding() {
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
               {locationView === "map" ? (
                 <Image
-                  src="/assets/imagenes/Collage_ubicacion.png"
+                  src="/assets/imagenes/Ubicacion_Azurebay.png"
                   alt="Al Marjan Island Area Map"
                   className="w-full h-auto"
                   width={1200}
@@ -3836,6 +3836,7 @@ export default function PlayaVivaLanding() {
                           name="altcha_payload"
                           hidefooter="true"
                           hidelogo="true"
+                          maxnumber="200000"
                           language={language}
                           strings={altchaStrings}
                         ></altcha-widget>

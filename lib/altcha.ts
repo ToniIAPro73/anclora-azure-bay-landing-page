@@ -7,7 +7,7 @@ import {
 } from "crypto";
 
 const DEFAULT_ALGORITHM = "SHA-256";
-const DEFAULT_MAX_NUMBER = 1_000_000;
+const DEFAULT_MAX_NUMBER = 200_000;
 const DEFAULT_TTL_SECONDS = 5 * 60;
 
 export type AltchaChallenge = {

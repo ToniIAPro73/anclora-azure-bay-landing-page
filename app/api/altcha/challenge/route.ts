@@ -5,6 +5,7 @@ const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
 const ALTCHA_CHALLENGE_TTL = Number(
   process.env.ALTCHA_CHALLENGE_TTL ?? 5 * 60,
 );
+const ALTCHA_MAX_NUMBER = Number(process.env.ALTCHA_MAX_NUMBER ?? 200_000);
 
 if (!ALTCHA_SECRET) {
   console.warn(
@@ -23,6 +24,7 @@ export async function GET() {
   try {
     const challenge = createAltchaChallenge(ALTCHA_SECRET, {
       ttlSeconds: ALTCHA_CHALLENGE_TTL,
+      maxNumber: ALTCHA_MAX_NUMBER,
     });
 
     return NextResponse.json(challenge);
