@@ -93,9 +93,6 @@ export default function PlayaVivaLanding() {
   const [activeGalleryTab, setActiveGalleryTab] = useState<
     "servicios" | "interior" | "sitios" | "video"
   >("servicios");
-  const [galleryVideoSource, setGalleryVideoSource] = useState<
-    "local" | "youtube"
-  >("local");
   const [animationStates, setAnimationStates] = useState({
     backgroundImage: false,
     logo: false,
@@ -3236,26 +3233,23 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "video" && (
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
-                {galleryVideoSource === "local" ? (
-                  <video
-                    className="w-full h-full object-cover"
+                <video
+                  className="w-full h-full object-cover"
+                  controls
+                  preload="metadata"
+                  playsInline
+                  title="Video promocional Azure Bay"
+                  crossOrigin="anonymous"
+                  poster="/assets/imagenes/Collage_Azurebay.png"
+                >
+                  <source
                     src="/assets/imagenes/video_promocional.mp4"
-                    controls
-                    preload="metadata"
-                    playsInline
-                    title="Video promocional Azure Bay"
-                    onError={() => setGalleryVideoSource("youtube")}
+                    type="video/mp4"
                   />
-                ) : (
-                  <iframe
-                    className="w-full h-full"
-                    src="https://www.youtube.com/embed/KbazzvTtRkY?rel=0&modestbranding=1"
-                    title="Playa Viva Overview"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                )}
+                  {language === "es"
+                    ? "Tu navegador no soporta video en HTML5."
+                    : "Your browser does not support HTML5 video."}
+                </video>
                 <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/20 via-transparent to-transparent" />
               </div>
             </div>
