@@ -3941,11 +3941,11 @@ export default function PlayaVivaLanding() {
             <div className="flex flex-col items-center mb-4 md:mb-6 space-y-2">
               <div className="group relative inline-flex items-center justify-center px-5 md:px-6 lg:px-7 py-6 md:py-7">
                 <div
-                  className="pointer-events-none absolute inset-0 rounded-[26px] bg-gradient-to-br from-[#fdf8ef] via-[#f4e8d5] to-[#e8dcc8] shadow-[0_20px_50px_rgba(34,24,14,0.22)] border border-[#e0d2b8]"
+                  className="pointer-events-none absolute inset-0 rounded-[26px] bg-linear-to-br from-[#fdf8ef] via-[#f4e8d5] to-[#e8dcc8] shadow-[0_20px_50px_rgba(34,24,14,0.22)] border border-[#e0d2b8]"
                   aria-hidden="true"
                 />
                 <div
-                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-6 md:-top-7 w-[82%] max-w-[420px] aspect-[3/1] bg-gradient-to-b from-[#f7ead3] via-[#f0e2c1] to-transparent shadow-[0_18px_34px_-18px_rgba(34,24,14,0.35)] rounded-t-[22px]"
+                  className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-6 md:-top-7 w-[82%] max-w-[420px] aspect-3/1 bg-linear-to-b from-[#f7ead3] via-[#f0e2c1] to-transparent shadow-[0_18px_34px_-18px_rgba(34,24,14,0.35)] rounded-t-[22px]"
                   style={{ clipPath: "polygon(50% 0%, 100% 100%, 0 100%)" }}
                   aria-hidden="true"
                 />
