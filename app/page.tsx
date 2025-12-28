@@ -3477,12 +3477,12 @@ export default function PlayaVivaLanding() {
             </div>
 
             {/* Vista condicional */}
-            <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30">
+            <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30 transition-all duration-300 hover:-translate-y-2 hover:border-gold-warm hover:shadow-gold-warm/20">
               {locationView === "map" ? (
                 <Image
                   src="/assets/imagenes/Ubicacion_Azurebay.png"
-                  alt="Al Marjan Island Area Map"
-                  className="w-full h-auto"
+                  alt="Azure Bay Area Map"
+                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1200}
                   height={800}
                   loading="lazy"
@@ -3490,9 +3490,9 @@ export default function PlayaVivaLanding() {
                 />
               ) : (
                 <Image
-                  src="/assets/imagenes/Collage_Al_Marjan_Island.png"
-                  alt="Al Marjan Island Collage"
-                  className="w-full h-auto"
+                  src="/assets/imagenes/Collage_Azurebay.png"
+                  alt="Azure Bay Collage"
+                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1200}
                   height={900}
                   loading="lazy"
@@ -3836,7 +3836,6 @@ export default function PlayaVivaLanding() {
                           name="altcha_payload"
                           hidefooter="true"
                           hidelogo="true"
-                          maxnumber="200000"
                           language={language}
                           strings={altchaStrings}
                         ></altcha-widget>
