@@ -3183,8 +3183,8 @@ export default function PlayaVivaLanding() {
                 <Image
                   src={
                     language === "es"
-                      ? "/assets/imagenes/collage-interiores-es.webp"
-                      : "/assets/imagenes/collage-interiores-en.webp"
+                      ? "/assets/imagenes/collage-interiores-es.png"
+                      : "/assets/imagenes/collage-interiores-en.png"
                   }
                   alt={
                     language === "es"
