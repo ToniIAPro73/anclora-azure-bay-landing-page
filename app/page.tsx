@@ -5,6 +5,7 @@ import Head from "next/head";
 import Script from "next/script";
 import Image from "next/image";
 import HubSpotScript from "./HubSpotScript";
+import promoVideo from "@/public/assets/imagenes/video_promocional.mp4";
 import { Button } from "@/components/ui/button";
 import {
   Globe,
@@ -3239,11 +3240,10 @@ export default function PlayaVivaLanding() {
                   preload="metadata"
                   playsInline
                   title="Video promocional Azure Bay"
-                  crossOrigin="anonymous"
                   poster="/assets/imagenes/Collage_Azurebay.png"
                 >
                   <source
-                    src="/assets/imagenes/video_promocional.mp4"
+                    src={promoVideo as string}
                     type="video/mp4"
                   />
                   {language === "es"
