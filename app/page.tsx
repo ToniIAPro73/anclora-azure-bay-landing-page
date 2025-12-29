@@ -430,25 +430,25 @@ export default function PlayaVivaLanding() {
           cards: [
             {
               title: "Studios",
-              size: "27.87-42.9 m²",
+              size: "27,87-42,9 m²",
               price: "Desde 192.000€",
               features: "Cocina integrada, baño premium, balcón privado",
             },
             {
               title: "1 Dormitorio",
-              size: "55.74-78.97 m²",
+              size: "55,74-78,97 m²",
               price: "Desde 325.000€",
               features: "Suite en-suite, vestidor, zona de lavandería",
             },
             {
               title: "2 Dormitorios",
-              size: "102.19-111.48 m²",
+              size: "102,19-111,48 m²",
               price: "Desde 540.000€",
               features: "Dos suites, cocina isla, balcones duales",
             },
             {
               title: "3 Dormitorios",
-              size: "157.94-167.22 m²",
+              size: "157,94-167,22 m²",
               price: "Desde 740.000€",
               features: "Master suite, cuarto de servicio, terraza 25m²",
             },
@@ -650,7 +650,7 @@ export default function PlayaVivaLanding() {
           {
             type: "Studio",
             size: "37-45 m²",
-            price: "Desde €170,000",
+            price: "Desde 170.000€",
             features: [
               "Smart Home",
               "Totalmente amueblado",
@@ -661,7 +661,7 @@ export default function PlayaVivaLanding() {
           {
             type: "1 Dormitorio",
             size: "65-75 m²",
-            price: "Desde €240,000",
+            price: "Desde 240.000€",
             features: [
               "Smart Home",
               "Totalmente amueblado",
@@ -672,7 +672,7 @@ export default function PlayaVivaLanding() {
           {
             type: "2 Dormitorios",
             size: "95-110 m²",
-            price: "Desde €350,000",
+            price: "Desde 350.000€",
             features: [
               "Smart Home",
               "Totalmente amueblado",
@@ -683,7 +683,7 @@ export default function PlayaVivaLanding() {
           {
             type: "3 Dormitorios",
             size: "135-160 m²",
-            price: "Desde €480,000",
+            price: "Desde 480.000€",
             features: [
               "Smart Home",
               "Totalmente amueblado",
