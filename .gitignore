@@ -46,6 +46,7 @@ desktop.ini
 # 🔹 Archivos multimedia grandes
 # ───────────────────────────────
 *.mp4
+!public/assets/imagenes/video_promocional.mp4
 *.mov
 *.avi
 *.mkv
