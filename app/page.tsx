@@ -421,7 +421,7 @@ export default function PlayaVivaLanding() {
             "Tres torres icónicas que combinan elegancia atemporal con el entorno costero de Azure Bay District.",
             "Diseño arquitectónico que maximiza vistas panorámicas al mar abierto desde cada residencia.",
           ],
-          image: "/assets/imagenes/collage_estructura.png",
+          image: "/assets/imagenes/collage_estructura.webp",
         },
         // FEATURES_2: Specifications
         specifications: {
@@ -461,23 +461,23 @@ export default function PlayaVivaLanding() {
           tabs: [
             {
               label: "Comunidad Costera",
-              image: "/assets/imagenes/view1.png",
+              image: "/assets/imagenes/view1.webp",
               description: "Comunidad exclusiva en primera línea de playa",
             },
             {
               label: "Diseño Inspirador",
-              image: "/assets/imagenes/view2.png",
+              image: "/assets/imagenes/view2.webp",
               description:
                 "Arquitectura que captura la esencia del Mediterráneo",
             },
             {
               label: "Lujo sin Esfuerzo",
-              image: "/assets/imagenes/view3.png",
+              image: "/assets/imagenes/view3.webp",
               description: "Lujo sin esfuerzo en cada detalle",
             },
             {
               label: "Acceso a Playa",
-              image: "/assets/imagenes/beach.png",
+              image: "/assets/imagenes/beach.webp",
               description: "Acceso directo a playas de arena blanca",
             },
           ],
@@ -489,29 +489,29 @@ export default function PlayaVivaLanding() {
           items: [
             {
               title: "Cine Exterior",
-              image: "/assets/imagenes/cinema.png",
+              image: "/assets/imagenes/cinema.webp",
               description:
                 "Cine al aire libre con proyección bajo las estrellas",
             },
             {
               title: "Spa y Bienestar",
-              image: "/assets/imagenes/foto galeria 7.png",
+              image: "/assets/imagenes/foto galeria 7.webp",
               description: "Centro de bienestar con tratamientos de lujo",
             },
             {
               title: "Centro de Fitness",
-              image: "/assets/imagenes/foto galeria 4.png",
+              image: "/assets/imagenes/foto galeria 4.webp",
               description:
                 "Gimnasio equipado con tecnología de última generación",
             },
             {
               title: "Piscinas Exteriores",
-              image: "/assets/imagenes/nueva_piscina_mejorada.png",
+              image: "/assets/imagenes/nueva_piscina_mejorada.webp",
               description: "Piscinas infinity con vistas al Mediterráneo",
             },
             {
               title: "Comercios y Restauración",
-              image: "/assets/imagenes/retail.png",
+              image: "/assets/imagenes/retail.webp",
               description: "Gastronomía y retail de primer nivel",
             },
           ],
@@ -590,7 +590,7 @@ export default function PlayaVivaLanding() {
         articles: [
           {
             date: "Mayo 2026",
-            image: "/assets/imagenes/news_1.png",
+            image: "/assets/imagenes/news_1.webp",
             alt: "Coastal Development Review - Azure Grand Marina",
             source: "Coastal Development Review",
             title: "Azure Grand Marina: el nuevo polo del waterfront",
@@ -600,7 +600,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "Abril 2026",
-            image: "/assets/imagenes/news_2.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "Global Wealth Digest - Coastal migration",
             source: "Global Wealth Digest",
             title: "La nueva ola de inversión en distritos costeros emergentes",
@@ -610,7 +610,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "Febrero 2026",
-            image: "/assets/imagenes/news_3.png",
+            image: "/assets/imagenes/news_3.webp",
             alt: "Marina & Hospitality Report - Signature Boulevard",
             source: "Marina & Hospitality Report",
             title: "Signature Boulevard: retail y hospitality en primera línea",
@@ -620,7 +620,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "Enero 2026",
-            image: "/assets/imagenes/news_4.png",
+            image: "/assets/imagenes/news_4.webp",
             alt: "Coastal Economics - Infrastructure impact",
             source: "Coastal Economics",
             title: "Infraestructura y apreciación: el ciclo del waterfront",
@@ -630,7 +630,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "Noviembre 2025",
-            image: "/assets/imagenes/news_5.png",
+            image: "/assets/imagenes/news_5.webp",
             alt: "Residential Market Insights - Supply & demand",
             source: "Residential Market Insights",
             title:
@@ -931,7 +931,7 @@ export default function PlayaVivaLanding() {
             "Three iconic towers combining timeless elegance with the coastal setting of Azure Bay District.",
             "Architectural design that maximizes panoramic views of the open sea from every residence.",
           ],
-          image: "/assets/imagenes/collage_estructura.png",
+          image: "/assets/imagenes/collage_estructura.webp",
         },
         // FEATURES_2: Specifications
         specifications: {
@@ -971,22 +971,22 @@ export default function PlayaVivaLanding() {
           tabs: [
             {
               label: "Coastal Community",
-              image: "/assets/imagenes/view1.png",
+              image: "/assets/imagenes/view1.webp",
               description: "Exclusive beachfront community",
             },
             {
               label: "Inspired Design",
-              image: "/assets/imagenes/view2.png",
+              image: "/assets/imagenes/view2.webp",
               description: "Architecture capturing Mediterranean essence",
             },
             {
               label: "Effortless Luxury",
-              image: "/assets/imagenes/view3.png",
+              image: "/assets/imagenes/view3.webp",
               description: "Effortless luxury in every detail",
             },
             {
               label: "Beach Access",
-              image: "/assets/imagenes/beach.png",
+              image: "/assets/imagenes/beach.webp",
               description: "Direct access to white sandy beaches",
             },
           ],
@@ -998,27 +998,27 @@ export default function PlayaVivaLanding() {
           items: [
             {
               title: "Outdoor Cinema",
-              image: "/assets/imagenes/cinema.png",
+              image: "/assets/imagenes/cinema.webp",
               description: "Open-air cinema with screenings under the stars",
             },
             {
               title: "Spa & Wellness",
-              image: "/assets/imagenes/foto galeria 7.png",
+              image: "/assets/imagenes/foto galeria 7.webp",
               description: "Wellness center with luxury treatments",
             },
             {
               title: "Fitness Center",
-              image: "/assets/imagenes/foto galeria 4.png",
+              image: "/assets/imagenes/foto galeria 4.webp",
               description: "Gym equipped with state-of-the-art technology",
             },
             {
               title: "Outdoor Swimming Pools",
-              image: "/assets/imagenes/nueva_piscina_mejorada.png",
+              image: "/assets/imagenes/nueva_piscina_mejorada.webp",
               description: "Infinity pools overlooking the Mediterranean",
             },
             {
               title: "Retail & Dining",
-              image: "/assets/imagenes/retail.png",
+              image: "/assets/imagenes/retail.webp",
               description: "World-class dining and retail",
             },
           ],
@@ -1097,7 +1097,7 @@ export default function PlayaVivaLanding() {
         articles: [
           {
             date: "May 2026",
-            image: "/assets/imagenes/news_1.png",
+            image: "/assets/imagenes/news_1.webp",
             alt: "Coastal Development Review - Azure Grand Marina",
             source: "Coastal Development Review",
             title: "Azure Grand Marina: the next waterfront hub",
@@ -1107,7 +1107,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "April 2026",
-            image: "/assets/imagenes/news_2.png",
+            image: "/assets/imagenes/news_2.webp",
             alt: "Global Wealth Digest - Coastal migration",
             source: "Global Wealth Digest",
             title: "Capital shifts towards emerging coastal districts",
@@ -1117,7 +1117,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "February 2026",
-            image: "/assets/imagenes/news_3.png",
+            image: "/assets/imagenes/news_3.webp",
             alt: "Marina & Hospitality Report - Signature Boulevard",
             source: "Marina & Hospitality Report",
             title: "Signature Boulevard: retail & hospitality on the seafront",
@@ -1127,7 +1127,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "January 2026",
-            image: "/assets/imagenes/news_4.png",
+            image: "/assets/imagenes/news_4.webp",
             alt: "Coastal Economics - Infrastructure impact",
             source: "Coastal Economics",
             title: "Infrastructure and appreciation: the waterfront cycle",
@@ -1137,7 +1137,7 @@ export default function PlayaVivaLanding() {
           },
           {
             date: "November 2025",
-            image: "/assets/imagenes/news_5.png",
+            image: "/assets/imagenes/news_5.webp",
             alt: "Residential Market Insights - Supply & demand",
             source: "Residential Market Insights",
             title: "Supply vs demand: why rents rise in prime turnkey products",
@@ -1390,25 +1390,25 @@ export default function PlayaVivaLanding() {
 
   const apartmentConfigs = {
     studio: {
-      image: "/assets/imagenes/studio-1.png",
+      image: "/assets/imagenes/studio-1.webp",
       sizeSqftRange: [300, 462] as [number, number],
       bedrooms: 0,
       bathrooms: 1,
     },
     oneBed: {
-      image: "/assets/imagenes/1-bedroom-1.png",
+      image: "/assets/imagenes/1-bedroom-1.webp",
       sizeSqftRange: [600, 850] as [number, number],
       bedrooms: 1,
       bathrooms: 1,
     },
     twoBed: {
-      image: "/assets/imagenes/2-bedroom-1.png",
+      image: "/assets/imagenes/2-bedroom-1.webp",
       sizeSqftRange: [1100, 1200] as [number, number],
       bedrooms: 2,
       bathrooms: 1,
     },
     threeBed: {
-      image: "/assets/imagenes/3-bedroom-1.png",
+      image: "/assets/imagenes/3-bedroom-1.webp",
       sizeSqftRange: [1700, 1800] as [number, number],
       bedrooms: 3,
       bathrooms: 2,
@@ -1813,7 +1813,7 @@ export default function PlayaVivaLanding() {
           href="https://track-eu1.hubspot.com"
           crossOrigin="anonymous"
         />
-        <link rel="preload" href="/hero-background.png" as="image" />
+        <link rel="preload" href="/assets/imagenes/hero-background.webp" as="image" />
       </Head>
       <script
         type="application/ld+json"
@@ -2094,7 +2094,7 @@ export default function PlayaVivaLanding() {
           }}
         >
           <Image
-            src="/hero-background.png"
+            src="/assets/imagenes/hero-background.webp"
             alt="Playa Viva Al Marjan Island"
             fill
             priority
@@ -2102,7 +2102,7 @@ export default function PlayaVivaLanding() {
             quality={60}
             className="object-cover"
             onError={(e) => {
-              e.currentTarget.src = "/fixed-hero-background.png";
+              e.currentTarget.src = "/assets/imagenes/hero-background.webp";
             }}
           />
         </div>
@@ -2139,7 +2139,7 @@ export default function PlayaVivaLanding() {
                 }}
               >
                 <Image
-                  src="/logo-azure-bay.png"
+                  src="/assets/imagenes/logo-azure-bay.webp"
                   alt="Azure Bay Logo"
                   width={384}
                   height={384}
@@ -3167,7 +3167,7 @@ export default function PlayaVivaLanding() {
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-2xl overflow-hidden border-2 border-gold-warm/30 shadow-2xl hover:border-gold-warm hover:shadow-gold-warm/20 transition-all duration-300 hover:-translate-y-2">
                 <Image
-                  src="/assets/imagenes/Collage-servicios-instalaciones.png"
+                  src="/assets/imagenes/Collage-servicios-instalaciones.webp"
                   alt="Servicios e Instalaciones - Playa Viva"
                   className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1210}
@@ -3186,8 +3186,8 @@ export default function PlayaVivaLanding() {
                 <Image
                   src={
                     language === "es"
-                      ? "/assets/imagenes/collage-interiores-es.png"
-                      : "/assets/imagenes/collage-interiores-en.png"
+                      ? "/assets/imagenes/collage-interiores-es.webp"
+                      : "/assets/imagenes/collage-interiores-en.webp"
                   }
                   alt={
                     language === "es"
@@ -3211,8 +3211,8 @@ export default function PlayaVivaLanding() {
                 <Image
                   src={
                     language === "es"
-                      ? "/assets/imagenes/Collage_Sitios_Interes_Mejorado-es.png"
-                      : "/assets/imagenes/Collage_Sitios_Interes_Mejorado-en.png"
+                      ? "/assets/imagenes/Collage_Sitios_Interes_Mejorado-es.webp"
+                      : "/assets/imagenes/Collage_Sitios_Interes_Mejorado-en.webp"
                   }
                   alt={
                     language === "es"
@@ -3239,7 +3239,7 @@ export default function PlayaVivaLanding() {
                   preload="metadata"
                   playsInline
                   title="Video promocional Azure Bay"
-                  poster="/assets/imagenes/Collage_Azurebay.png"
+                  poster="/assets/imagenes/Collage_Azurebay.webp"
                 >
                   <source
                     src="/assets/imagenes/video_promocional.mp4"
@@ -3488,7 +3488,7 @@ export default function PlayaVivaLanding() {
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30 transition-all duration-300 hover:-translate-y-2 hover:border-gold-warm hover:shadow-gold-warm/20">
               {locationView === "map" ? (
                 <Image
-                  src="/assets/imagenes/Ubicacion_Azurebay.png"
+                  src="/assets/imagenes/Ubicacion_Azurebay.webp"
                   alt="Azure Bay Area Map"
                   className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1200}
@@ -3498,7 +3498,7 @@ export default function PlayaVivaLanding() {
                 />
               ) : (
                 <Image
-                  src="/assets/imagenes/Collage_Azurebay.png"
+                  src="/assets/imagenes/Collage_Azurebay.webp"
                   alt="Azure Bay Collage"
                   className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                   width={1200}
@@ -3958,7 +3958,7 @@ export default function PlayaVivaLanding() {
                   aria-hidden="true"
                 />
                 <Image
-                  src="/assets/imagenes/anclora.png"
+                  src="/assets/imagenes/anclora.webp"
                   alt="Anclora Private Estates"
                   width={320}
                   height={200}
