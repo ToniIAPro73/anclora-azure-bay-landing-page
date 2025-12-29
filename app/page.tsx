@@ -3231,11 +3231,11 @@ export default function PlayaVivaLanding() {
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
                 <iframe
-                  src="https://player.cloudinary.com/embed/?cloud_name=dt6lzvqqk&public_id=video_promocional_fbzuoq&profile=cld-default"
+                  src={`https://player.cloudinary.com/embed/?cloud_name=dt6lzvqqk&public_id=${language === "es" ? "video_promocional_es_bixeaq" : "video_promocional_en_cszixb"}&profile=cld-default`}
                   className="w-full h-full"
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   allowFullScreen
-                  title="Video promocional Azure Bay"
+                  title={language === "es" ? "Video promocional Azure Bay" : "Azure Bay Promotional Video"}
                 />
               </div>
             </div>
