@@ -3233,23 +3233,13 @@ export default function PlayaVivaLanding() {
           {activeGalleryTab === "video" && (
             <div className="max-w-6xl mx-auto">
               <div className="relative rounded-3xl overflow-hidden border-2 border-gold-warm/40 shadow-2xl bg-black aspect-video">
-                <video
-                  className="w-full h-full object-cover"
-                  controls
-                  preload="metadata"
-                  playsInline
+                <iframe
+                  src="https://player.cloudinary.com/embed/?cloud_name=dt6lzvqqk&public_id=video_promocional_fbzuoq&profile=cld-default"
+                  className="w-full h-full"
+                  allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                  allowFullScreen
                   title="Video promocional Azure Bay"
-                  poster="/assets/imagenes/Collage_Azurebay.webp"
-                >
-                  <source
-                    src="/assets/imagenes/video_promocional.mp4"
-                    type="video/mp4"
-                  />
-                  {language === "es"
-                    ? "Tu navegador no soporta video en HTML5."
-                    : "Your browser does not support HTML5 video."}
-                </video>
-                <div className="absolute inset-0 pointer-events-none bg-linear-to-t from-black/20 via-transparent to-transparent" />
+                />
               </div>
             </div>
           )}
