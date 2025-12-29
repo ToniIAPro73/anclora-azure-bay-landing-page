@@ -3475,8 +3475,8 @@ export default function PlayaVivaLanding() {
             <div className="rounded-2xl overflow-hidden shadow-2xl border-2 border-gold-warm/30 transition-all duration-300 hover:-translate-y-2 hover:border-gold-warm hover:shadow-gold-warm/20">
               {locationView === "map" ? (
                 <Image
-                  src="/assets/imagenes/Ubicacion_Azurebay.webp"
-                  alt="Azure Bay Area Map"
+                  src={`/assets/imagenes/Ubicacion_Azurebay_${language}.webp`}
+                  alt={language === "es" ? "Mapa de ubicación Azure Bay" : "Azure Bay Area Map"}
                   className="w-full h-auto object-cover grayscale-hover"
                   width={1200}
                   height={800}
