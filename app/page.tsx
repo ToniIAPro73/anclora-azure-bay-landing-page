@@ -1813,7 +1813,7 @@ export default function PlayaVivaLanding() {
           href="https://track-eu1.hubspot.com"
           crossOrigin="anonymous"
         />
-        <link rel="preload" href="/assets/imagenes/hero-background.webp" as="image" />
+        <link rel="preload" href="/assets/imagenes/hero-background.png" as="image" />
       </Head>
       <script
         type="application/ld+json"
@@ -2094,16 +2094,13 @@ export default function PlayaVivaLanding() {
           }}
         >
           <Image
-            src="/assets/imagenes/hero-background.webp"
+            src="/assets/imagenes/hero-background.png"
             alt="Playa Viva Al Marjan Island"
             fill
             priority
             sizes="100vw"
-            quality={60}
+            quality={85}
             className="object-cover"
-            onError={(e) => {
-              e.currentTarget.src = "/assets/imagenes/hero-background.webp";
-            }}
           />
         </div>
 
@@ -2712,7 +2709,7 @@ export default function PlayaVivaLanding() {
                           alt={article.alt}
                           width={480}
                           height={320}
-                          className="w-full h-48 md:h-56 object-cover filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                          className="w-full h-48 md:h-56 object-cover grayscale-hover rounded-xl"
                           sizes="(max-width: 768px) 80vw, 20vw"
                         />
                         <div className="mt-4 space-y-2 flex-1 flex flex-col">
@@ -2788,7 +2785,7 @@ export default function PlayaVivaLanding() {
                         alt={article.alt}
                         width={480}
                         height={320}
-                        className="w-full h-48 md:h-56 object-cover filter grayscale hover:grayscale-0 transition-all duration-300 rounded-xl"
+                        className="w-full h-48 md:h-56 object-cover grayscale-hover rounded-xl"
                         sizes="(max-width: 768px) 80vw, 20vw"
                       />
                       <div className="mt-4 space-y-2 flex-1 flex flex-col">
@@ -2881,7 +2878,7 @@ export default function PlayaVivaLanding() {
                 alt={t.features.development.title}
                 width={1200}
                 height={800}
-                className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                className="w-full h-auto object-cover grayscale-hover"
                 sizes="(max-width: 1024px) 100vw, 75vw"
               />
               <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 via-black/10 to-transparent p-6">
@@ -2971,7 +2968,7 @@ export default function PlayaVivaLanding() {
                 alt={t.features.playaViva.tabs[activePlayaVivaTab].label}
                 width={1200}
                 height={800}
-                className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                className="w-full h-auto object-cover grayscale-hover"
                 sizes="(max-width: 1024px) 100vw, 75vw"
               />
               <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 via-black/30 to-transparent p-8">
@@ -3025,7 +3022,7 @@ export default function PlayaVivaLanding() {
                         alt={item.title}
                         fill
                         unoptimized
-                        className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
+                        className="object-cover grayscale-hover"
                         sizes="256px"
                       />
                     </div>
@@ -3069,7 +3066,7 @@ export default function PlayaVivaLanding() {
                         alt={item.title}
                         fill
                         unoptimized
-                        className="object-cover filter grayscale hover:grayscale-0 transition-all duration-300"
+                        className="object-cover grayscale-hover"
                         sizes="(max-width: 768px) 100vw, 320px"
                       />
                     </div>
@@ -3169,7 +3166,7 @@ export default function PlayaVivaLanding() {
                 <Image
                   src="/assets/imagenes/Collage-servicios-instalaciones.webp"
                   alt="Servicios e Instalaciones - Playa Viva"
-                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-auto object-cover grayscale-hover"
                   width={1210}
                   height={968}
                   loading="lazy"
@@ -3194,7 +3191,7 @@ export default function PlayaVivaLanding() {
                       ? "Collage de interiores"
                       : "Interiors collage"
                   }
-                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-auto object-cover grayscale-hover"
                   width={1210}
                   height={968}
                   loading="lazy"
@@ -3219,7 +3216,7 @@ export default function PlayaVivaLanding() {
                       ? "Sitios de interes cercanos a Playa Viva"
                       : "Points of interest near Playa Viva"
                   }
-                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-auto object-cover grayscale-hover"
                   width={1210}
                   height={968}
                   loading="lazy"
@@ -3310,7 +3307,7 @@ export default function PlayaVivaLanding() {
                   width={1600}
                   height={1000}
                   unoptimized
-                  className="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-full object-cover grayscale-hover"
                   sizes="(max-width: 768px) 100vw, 75vw"
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 via-black/10 to-transparent p-6">
@@ -3480,7 +3477,7 @@ export default function PlayaVivaLanding() {
                 <Image
                   src="/assets/imagenes/Ubicacion_Azurebay.webp"
                   alt="Azure Bay Area Map"
-                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-auto object-cover grayscale-hover"
                   width={1200}
                   height={800}
                   loading="lazy"
@@ -3490,7 +3487,7 @@ export default function PlayaVivaLanding() {
                 <Image
                   src="/assets/imagenes/Collage_Azurebay.webp"
                   alt="Azure Bay Collage"
-                  className="w-full h-auto object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                  className="w-full h-auto object-cover grayscale-hover"
                   width={1200}
                   height={900}
                   loading="lazy"
@@ -3952,7 +3949,7 @@ export default function PlayaVivaLanding() {
                   alt="Anclora Private Estates"
                   width={320}
                   height={200}
-                  className="relative z-10 h-40 md:h-52 lg:h-64 object-contain w-auto filter grayscale transition-all duration-500 ease-out drop-shadow-2xl group-hover:-translate-y-2 group-hover:drop-shadow-[0_18px_45px_rgba(34,24,14,0.28)] group-hover:grayscale-0"
+                  className="relative z-10 h-40 md:h-52 lg:h-64 object-contain w-auto grayscale-group-hover transition-all duration-500 ease-out drop-shadow-2xl group-hover:-translate-y-2 group-hover:drop-shadow-[0_18px_45px_rgba(34,24,14,0.28)]"
                   sizes="(max-width: 768px) 60vw, 25vw"
                 />
               </div>

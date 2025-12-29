@@ -345,3 +345,44 @@ img[alt="Azure Bay Logo"] {
   background-color: transparent !important;
   background-image: none !important;
 }
+
+/* Grayscale effect that works on all devices */
+/* On touch devices (no hover): show images in color */
+/* On devices with hover (desktop): show grayscale, color on hover */
+.grayscale-hover {
+  filter: grayscale(0);
+  -webkit-filter: grayscale(0);
+  transition: filter 0.5s ease, -webkit-filter 0.5s ease, transform 0.3s ease;
+  will-change: filter, transform;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .grayscale-hover {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+  }
+
+  .grayscale-hover:hover {
+    filter: grayscale(0);
+    -webkit-filter: grayscale(0);
+  }
+
+  /* Group hover variant for parent container hover */
+  .grayscale-group-hover {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+  }
+
+  .group:hover .grayscale-group-hover {
+    filter: grayscale(0);
+    -webkit-filter: grayscale(0);
+  }
+}
+
+/* Base state for group hover (color on mobile) */
+.grayscale-group-hover {
+  filter: grayscale(0);
+  -webkit-filter: grayscale(0);
+  transition: filter 0.5s ease, -webkit-filter 0.5s ease;
+  will-change: filter;
+}
