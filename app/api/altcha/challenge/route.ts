@@ -8,37 +8,28 @@ const ALTCHA_CHALLENGE_TTL = Number(
   process.env.ALTCHA_CHALLENGE_TTL ?? 5 * 60,
 );
 const ALTCHA_MAX_NUMBER = Number(process.env.ALTCHA_MAX_NUMBER ?? 200_000);
-const IS_PROD = process.env.NODE_ENV === "production";
 
 if (!ALTCHA_SECRET) {
   console.warn(
-    "[ALTCHA] ALTCHA_SECRET is not configured. Challenge endpoint will fail in production; using fallback in non-production.",
+    "[ALTCHA] ALTCHA_SECRET is not configured. Challenge endpoint will fail.",
   );
 }
 
 export async function GET() {
-  if (!ALTCHA_SECRET && IS_PROD) {
+  if (!ALTCHA_SECRET) {
     return NextResponse.json(
       { error: "ALTCHA secret not configured" },
       { status: 500 },
     );
   }
 
-  const hmacKey = ALTCHA_SECRET ?? "dev-altcha-secret";
-
   try {
-    const challenge = createAltchaChallenge(hmacKey, {
+    const challenge = createAltchaChallenge(ALTCHA_SECRET, {
       ttlSeconds: ALTCHA_CHALLENGE_TTL,
       maxNumber: ALTCHA_MAX_NUMBER,
     });
 
-    // In non-production, expose a flag so clients can detect fallback behavior
-    const payload = {
-      ...challenge,
-      isDevFallback: !ALTCHA_SECRET,
-    };
-
-    return NextResponse.json(payload);
+    return NextResponse.json(challenge);
   } catch (error) {
     console.error("[ALTCHA] Failed to create challenge:", error);
     return NextResponse.json(

@@ -75,7 +75,6 @@ console.log("[INIT] S3 Configuration:", {
 const PDF_FIELD_NAME = "Nombre_Personalizacion_Lead";
 const PDF_STORAGE_PREFIX = "dossiers";
 const ALTCHA_SECRET = process.env.ALTCHA_SECRET;
-const IS_PROD = process.env.NODE_ENV === "production";
 const DOSSIER_ALERT_RECIPIENTS = {
   es: {
     email: process.env.DOSSIER_ALERT_EMAIL_ES ?? "tony@uniestate.co.uk",
@@ -90,9 +89,7 @@ const DOSSIER_ALERT_RECIPIENTS = {
 };
 
 if (!ALTCHA_SECRET) {
-  console.warn(
-    "[ALTCHA] ALTCHA_SECRET is not configured. Verification will fail in production; skipping in non-production.",
-  );
+  console.warn("[ALTCHA] ALTCHA_SECRET is not configured. Verification will fail.");
 }
 
 async function submitToHubSpot(payload: LeadSubmitPayload) {
@@ -896,7 +893,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!ALTCHA_SECRET && IS_PROD) {
+    if (!ALTCHA_SECRET) {
       return NextResponse.json(
         { error: "ALTCHA no está configurado en el backend" },
         { status: 500 },
@@ -904,16 +901,12 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      if (ALTCHA_SECRET) {
-        const isValid = verifyAltchaPayload(altchaPayload, ALTCHA_SECRET);
-        if (!isValid) {
-          return NextResponse.json(
-            { error: "Verificación ALTCHA inválida" },
-            { status: 400 },
-          );
-        }
-      } else {
-        console.warn("[ALTCHA] Skipping ALTCHA verification in non-production because ALTCHA_SECRET is not set.");
+      const isValid = verifyAltchaPayload(altchaPayload, ALTCHA_SECRET);
+      if (!isValid) {
+        return NextResponse.json(
+          { error: "Verificación ALTCHA inválida" },
+          { status: 400 },
+        );
       }
     } catch (error) {
       console.error("[ALTCHA] Error verificando payload:", error);
